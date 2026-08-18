@@ -1,59 +1,87 @@
-# GestionConge
+# Gestion des congés — AFRIX GLOBAL
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.21.
+Application frontend développée avec Angular pour gérer les demandes de congés, leur validation et le suivi des soldes.
 
-## Development server
+## Vue d'ensemble
 
-To start a local development server, run:
+Ce dépôt contient le code source de l'application dans le répertoire `src/`. Le projet utilise Angular CLI pour le développement et le build.
+
+## Prérequis
+
+- Node.js (version recommandée : 18+)
+- npm ou yarn
+- Angular CLI (optionnel mais recommandé) : `npm install -g @angular/cli`
+
+## Installation
+
+Cloner puis installer les dépendances :
 
 ```bash
+git clone <url-du-repo>
+cd Gestion-des-conges-AFRIX-GLOBAL
+npm install
+```
+
+## Exécution en développement
+
+```bash
+npm start
+# ou
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Ouvrir `http://localhost:4200/`.
 
-## Code scaffolding
+## Commandes utiles
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- `npm start` / `ng serve` — lancer le serveur de développement
+- `npm run build` / `ng build` — builder pour production (sortie dans `dist/`)
+- `npm test` / `ng test` — exécuter les tests unitaires
+- `npm run e2e` / `ng e2e` — exécuter les tests e2e (si configurés)
+- `npm run lint` — lancer le linter (si configuré)
 
-```bash
-ng generate component component-name
-```
+Les scripts précis sont définis dans le fichier `package.json`.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Structure du projet
 
-```bash
-ng generate --help
-```
+- `src/` : code source
+  - `src/app/` : modules, composants et routes
+  - `src/app/features/` : fonctionnalités (auth, conges, dashboard, users, ...)
+  - `src/app/core/` : services, guards et interceptors globaux
+  - `src/app/shared/` : composants et utilitaires réutilisables
+- `public/` : fichiers statiques
+- `.env.example` : modèle de variables d'environnement
 
-## Building
+## Variables d'environnement
 
-To build the project run:
+Utilisez `environment.ts` / `environment.prod.ts` ou un fichier `.env` selon votre workflow. Ne commitez jamais de secrets.
 
-```bash
-ng build
-```
+## Tests
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- Écrire des tests unitaires pour les nouvelles fonctionnalités.
+- Lancer les tests avant d'ouvrir une PR : `npm test`.
 
-## Running unit tests
+## Déploiement
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Générez un build de production puis déployez le contenu du dossier `dist/` sur la plateforme de votre choix (Netlify, Vercel, Azure, etc.) :
 
 ```bash
-ng e2e
+npm run build -- --configuration production
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Contribuer
 
-## Additional Resources
+Voir `CONTRIBUTING.md` pour le processus de contribution, templates et checklist. En bref :
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+1. Créez une branche : `git checkout -b feature/ma-fonctionnalite`
+2. Ouvrez une issue si nécessaire.
+3. Ajoutez des tests et documentez vos changements.
+4. Ouvrez une Pull Request vers `main` (ou `develop`).
+
+## Licence & Code of Conduct
+
+Ajoutez un fichier `LICENSE` et `CODE_OF_CONDUCT.md` si nécessaire. Précisez la licence utilisée dans le dépôt.
+
+## Mainteneurs / Contact
+
+Ouvrez une issue pour signaler un bug ou proposer une amélioration. Listez ici les mainteneurs ou contacts si besoin.
