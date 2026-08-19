@@ -1,0 +1,29 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.field-label {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+}
+
+.field-input {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: var(--transition-smooth);
+}
+
+.field-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(91, 154, 168, 0.15);
+}

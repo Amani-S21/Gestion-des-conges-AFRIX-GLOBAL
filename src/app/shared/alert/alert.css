@@ -1,0 +1,26 @@
+.alert {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body);
+  padding: 0.85rem 1.25rem;
+  border-radius: 14px;
+  border-left: 4px solid;
+  transition: var(--transition-smooth);
+}
+
+.alert-success {
+  background: rgba(111, 191, 139, 0.1);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.alert-warning {
+  background: rgba(232, 168, 85, 0.1);
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+}
+
+.alert-danger {
+  background: rgba(232, 133, 133, 0.1);
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
