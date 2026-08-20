@@ -1,0 +1,67 @@
+@'
+<div class="layout">
+
+  <header class="header">
+    <div class="logo">
+      AFRIX GLOBAL
+    </div>
+
+    <div class="header-right">
+      <app-icon name="user"></app-icon>
+      <span>Administrateur</span>
+    </div>
+  </header>
+
+  <div class="main-container">
+
+    <aside class="sidebar">
+
+      <nav>
+
+        <a routerLink="/app/dashboard" routerLinkActive="active" class="menu-item">
+          <app-icon name="check"></app-icon>
+          <span>Tableau de bord</span>
+        </a>
+
+        <a routerLink="/app/conges" routerLinkActive="active" class="menu-item">
+          <app-icon name="calendar"></app-icon>
+          <span>Congés</span>
+        </a>
+
+        <a routerLink="/app/validation" routerLinkActive="active" class="menu-item">
+          <app-icon name="check"></app-icon>
+          <span>Validation</span>
+        </a>
+
+        <a routerLink="/app/users" routerLinkActive="active" class="menu-item">
+          <app-icon name="user"></app-icon>
+          <span>Employés</span>
+        </a>
+
+        <a routerLink="/app/notifications" routerLinkActive="active" class="menu-item">
+          <app-icon name="calendar"></app-icon>
+          <span>Notifications</span>
+        </a>
+
+        <a routerLink="/app/rapport" routerLinkActive="active" class="menu-item">
+          <app-icon name="check"></app-icon>
+          <span>Rapports</span>
+        </a>
+
+        <a routerLink="/app/soldes" routerLinkActive="active" class="menu-item">
+          <app-icon name="calendar"></app-icon>
+          <span>Soldes</span>
+        </a>
+
+      </nav>
+
+    </aside>
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
+
+</div>
+'@ | Set-Content src/app/layout/layout.html
