@@ -1,0 +1,57 @@
+<div class="layout">
+
+  <!-- Barre supérieure -->
+  <header class="header">
+    <div class="logo">
+      AFRIX GLOBAL
+    </div>
+
+    <div class="header-right">
+      <span class="notification">🔔</span>
+      <span class="user">👤 Administrateur</span>
+    </div>
+  </header>
+
+  <!-- Partie principale -->
+  <div class="main-container">
+
+    <!-- Menu latéral -->
+    <aside class="sidebar">
+
+      <nav>
+        <a href="#" class="menu-item active">
+          🏠
+          <span>Tableau de bord</span>
+        </a>
+
+        <a href="#" class="menu-item">
+          📅
+          <span>Congés</span>
+        </a>
+
+        <a href="#" class="menu-item">
+          📝
+          <span>Demandes</span>
+        </a>
+
+        <a href="#" class="menu-item">
+          👥
+          <span>Employés</span>
+        </a>
+
+        <a href="#" class="menu-item">
+          ⚙️
+          <span>Paramètres</span>
+        </a>
+      </nav>
+
+    </aside>
+
+    <!-- Zone où les pages seront affichées -->
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
+
+</div>
