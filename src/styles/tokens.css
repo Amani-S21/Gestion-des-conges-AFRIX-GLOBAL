@@ -26,7 +26,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, #E8F3F5 0%, #FAFAFA 50%, #F0F7F8 100%);
+  background: var(--color-bg);
 }
 
 :root {

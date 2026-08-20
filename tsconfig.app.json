@@ -3,6 +3,8 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    // Definit le dossier racine des sources pour organiser correctement les fichiers compiles.
+    "rootDir": "./src",
     "outDir": "./out-tsc/app",
     "types": [
       "node"

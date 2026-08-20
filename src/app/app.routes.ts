@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  {
-    path: 'home',
-    loadComponent: () => import('./features/home/home').then((m) => m.Home),
-  },
+   {
+    path: '',
+    loadComponent: () => import('./layout/site/site').then((m) => m.Site),
+    children: [
+      { path: '', pathMatch: 'full',loadComponent: () => import('./features/home/home').then((m) => m.Home)},
+
   {
     path: 'dashboard',
     loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.default),
@@ -39,9 +40,13 @@ export const routes: Routes = [
     path: 'validation',
     loadComponent: () => import('./features/validation/validation').then((m) => m.Validation),
   },
+],
+   },
+   
   {
     path: 'not-found',
     loadComponent: () => import('./features/not-found/not-found').then((m) => m.default),
   },
+
   { path: '**', redirectTo: 'not-found' },
 ];
