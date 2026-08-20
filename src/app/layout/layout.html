@@ -1,53 +1,62 @@
+@'
 <div class="layout">
 
-  <!-- Barre supérieure -->
   <header class="header">
     <div class="logo">
       AFRIX GLOBAL
     </div>
 
     <div class="header-right">
-      <span class="notification">🔔</span>
-      <span class="user">👤 Administrateur</span>
+      <app-icon name="user"></app-icon>
+      <span>Administrateur</span>
     </div>
   </header>
 
-  <!-- Partie principale -->
   <div class="main-container">
 
-    <!-- Menu latéral -->
     <aside class="sidebar">
 
       <nav>
-        <a href="#" class="menu-item active">
-          🏠
+
+        <a routerLink="/app/dashboard" routerLinkActive="active" class="menu-item">
+          <app-icon name="check"></app-icon>
           <span>Tableau de bord</span>
         </a>
 
-        <a href="#" class="menu-item">
-          📅
+        <a routerLink="/app/conges" routerLinkActive="active" class="menu-item">
+          <app-icon name="calendar"></app-icon>
           <span>Congés</span>
         </a>
 
-        <a href="#" class="menu-item">
-          📝
-          <span>Demandes</span>
+        <a routerLink="/app/validation" routerLinkActive="active" class="menu-item">
+          <app-icon name="check"></app-icon>
+          <span>Validation</span>
         </a>
 
-        <a href="#" class="menu-item">
-          👥
+        <a routerLink="/app/users" routerLinkActive="active" class="menu-item">
+          <app-icon name="user"></app-icon>
           <span>Employés</span>
         </a>
 
-        <a href="#" class="menu-item">
-          ⚙️
-          <span>Paramètres</span>
+        <a routerLink="/app/notifications" routerLinkActive="active" class="menu-item">
+          <app-icon name="calendar"></app-icon>
+          <span>Notifications</span>
         </a>
+
+        <a routerLink="/app/rapport" routerLinkActive="active" class="menu-item">
+          <app-icon name="check"></app-icon>
+          <span>Rapports</span>
+        </a>
+
+        <a routerLink="/app/soldes" routerLinkActive="active" class="menu-item">
+          <app-icon name="calendar"></app-icon>
+          <span>Soldes</span>
+        </a>
+
       </nav>
 
     </aside>
 
-    <!-- Zone où les pages seront affichées -->
     <main class="content">
       <router-outlet></router-outlet>
     </main>
@@ -55,3 +64,4 @@
   </div>
 
 </div>
+'@ | Set-Content src/app/layout/layout.html

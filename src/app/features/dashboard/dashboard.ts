@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-dashboard',
   imports: [],
-  templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css',
+  template: ` <p>dashboard can be inprogress !</p> `,
+  styles: ``,
 })
-export class Dashboard {}
+export default class Dashboard {}

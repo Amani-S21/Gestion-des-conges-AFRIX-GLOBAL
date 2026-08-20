@@ -1,16 +1,84 @@
 import { Routes } from '@angular/router';
 import { Layout } from './layout/layout';
-import { Dashboard } from './pages/dashboard/dashboard';
 
 export const routes: Routes = [
   {
     path: '',
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
+
+  {
+    path: 'home',
+    loadComponent: () =>
+      import('./features/home/home').then((m) => m.Home),
+  },
+
+  {
+    path: 'auth',
+    loadComponent: () =>
+      import('./features/auth/auth').then((m) => m.default),
+  },
+
+  {
+    path: 'app',
     component: Layout,
     children: [
       {
         path: '',
-        component: Dashboard
-      }
-    ]
-  }
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./features/dashboard/dashboard').then((m) => m.default),
+      },
+      {
+        path: 'conges',
+        loadComponent: () =>
+          import('./features/conge/conge').then((m) => m.default),
+      },
+      {
+        path: 'users',
+        loadComponent: () =>
+          import('./features/users/users').then((m) => m.default),
+      },
+      {
+        path: 'notifications',
+        loadComponent: () =>
+          import('./features/notifications/notifications').then(
+            (m) => m.Notifications,
+          ),
+      },
+      {
+        path: 'rapport',
+        loadComponent: () =>
+          import('./features/rapport/rapport').then((m) => m.Rapport),
+      },
+      {
+        path: 'soldes',
+        loadComponent: () =>
+          import('./features/soldes/soldes').then((m) => m.Soldes),
+      },
+      {
+        path: 'validation',
+        loadComponent: () =>
+          import('./features/validation/validation').then(
+            (m) => m.Validation,
+          ),
+      },
+    ],
+  },
+
+  {
+    path: 'not-found',
+    loadComponent: () =>
+      import('./features/not-found/not-found').then((m) => m.default),
+  },
+
+  {
+    path: '**',
+    redirectTo: 'not-found',
+  },
 ];
