@@ -1,0 +1,36 @@
+.btn {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+  color: #FFFFFF;
+  border: none;
+  border-radius: 999px;
+  padding: 0.85rem 1.75rem;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body);
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(91, 154, 168, 0.35);
+  transition: var(--transition-smooth);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(91, 154, 168, 0.45);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(91, 154, 168, 0.3);
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--color-primary);
+  border: 1px solid rgba(91, 154, 168, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
