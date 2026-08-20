@@ -2,10 +2,19 @@ import { Routes } from '@angular/router';
 import { Layout } from './layout/layout';
 
 export const routes: Routes = [
-  {
+   {
     path: '',
-    redirectTo: 'home',
-    pathMatch: 'full',
+    loadComponent: () => import('./layout/site/site').then((m) => m.Site),
+    children: [
+      { path: '', pathMatch: 'full',loadComponent: () => import('./features/home/home').then((m) => m.Home)},
+
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.default),
+  },
+  {
+    path: 'conges',
+    loadComponent: () => import('./features/conge/conge').then((m) => m.default),
   },
 
   {
@@ -76,9 +85,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/not-found/not-found').then((m) => m.default),
   },
-
+],
+   },
+   
   {
     path: '**',
     redirectTo: 'not-found',
   },
+
+  { path: '**', redirectTo: 'not-found' },
 ];
