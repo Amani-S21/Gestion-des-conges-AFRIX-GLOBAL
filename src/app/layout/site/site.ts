@@ -10,7 +10,7 @@ import { RouterOutlet } from "@angular/router";
   <div class="flex min-h-screen flex-col bg-(--color-bg)">
     <app-navbar />
 
-    <main class="flex-1">
+    <main class="flex-1 pt-20">
       <router-outlet />
     </main>
 

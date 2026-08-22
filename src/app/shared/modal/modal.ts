@@ -1,15 +1,19 @@
 import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
+import { IconComponent } from '../icon/icon';
 
 @Component({
   selector: 'app-modal',
+  imports: [IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (open()) {
-      <div class="modal-backdrop" (click)="close.emit()">
-        <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-backdrop">
+        <div class="modal-box" role="dialog" aria-modal="true" [attr.aria-label]="title()">
           <div class="modal-header">
             <span class="modal-title">{{ title() }}</span>
-            <button class="modal-close" (click)="close.emit()" aria-label="Fermer">✕</button>
+            <button class="modal-close" type="button" (click)="closed.emit()" aria-label="Fermer">
+              <app-icon name="close" />
+            </button>
           </div>
           <div class="modal-body">
             <ng-content></ng-content>
@@ -23,5 +27,5 @@ import { Component, input, output, ChangeDetectionStrategy } from '@angular/core
 export class ModalComponent {
   open = input(false);
   title = input('');
-  close = output<void>();
+  closed = output<void>();
 }

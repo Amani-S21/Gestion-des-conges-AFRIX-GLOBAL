@@ -16,6 +16,14 @@ export const routes: Routes = [
     loadComponent: () => import('./features/conge/conge').then((m) => m.default),
   },
   {
+    path: 'conges/historique',
+    loadComponent: () => import('./features/conge/conge-history').then((m) => m.default),
+  },
+  {
+    path: 'conges/:id',
+    loadComponent: () => import('./features/conge/conge-detail').then((m) => m.default),
+  },
+  {
     path: 'users',
     loadComponent: () => import('./features/users/users').then((m) => m.default),
   },

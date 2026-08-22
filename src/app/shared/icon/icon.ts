@@ -16,6 +16,13 @@ import { Component, input, ChangeDetectionStrategy } from '@angular/core';
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       }
+      @case ('menu') {
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="4" y1="6" x2="20" y2="6"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="18" x2="20" y2="18"></line>
+        </svg>
+      }
       @case ('calendar') {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="4" width="18" height="18" rx="3"></rect>
@@ -48,6 +55,17 @@ import { Component, input, ChangeDetectionStrategy } from '@angular/core';
           <polyline points="19 12 12 19 5 12"></polyline>
         </svg>
       }
+      @case ('moon') {
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.5 6.5 0 0 0 21 12.8Z"></path>
+        </svg>
+      }
+      @case ('sun') {
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path>
+        </svg>
+      }
       @case ('facebook') {
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M13.5 21v-8h2.75l.4-3h-3.15V8.1c0-.87.24-1.46 1.5-1.46h1.8V3.96a24 24 0 0 0-2.63-.14c-2.6 0-4.38 1.59-4.38 4.5V10H7v3h2.79v8h3.71Z"></path>
@@ -75,5 +93,5 @@ import { Component, input, ChangeDetectionStrategy } from '@angular/core';
   styleUrl: './icon.css'
 })
 export class IconComponent {
-  name = input<'check' | 'close' | 'calendar' | 'user' | 'chevron' | 'log-in' | 'arrow-down' | 'facebook' | 'instagram' | 'linkedin' | 'whatsapp'>('check');
+  name = input<'check' | 'close' | 'menu' | 'calendar' | 'user' | 'chevron' | 'log-in' | 'arrow-down' | 'moon' | 'sun' | 'facebook' | 'instagram' | 'linkedin' | 'whatsapp'>('check');
 }

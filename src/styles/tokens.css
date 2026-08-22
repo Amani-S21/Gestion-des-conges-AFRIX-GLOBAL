@@ -8,6 +8,8 @@
   --color-success: #6FBF8B;
   --color-warning: #E8A855;
   --color-danger: #E88585;
+  --color-header: #245566;
+  --color-footer: #183B47;
   --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
   --font-size-h1: 2rem;
   --font-size-h2: 1.5rem;
@@ -21,12 +23,16 @@
   --color-surface: rgba(44, 44, 46, 0.65);
   --color-text: #F2F2F2;
   --color-text-secondary: #A1A1A6;
+  --color-header: #142F3A;
+  --color-footer: #10262E;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
   background: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 :root {
