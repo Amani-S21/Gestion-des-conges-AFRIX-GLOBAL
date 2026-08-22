@@ -1,0 +1,12 @@
+# Backend
+Backend/.env
+Backend/venv/
+Backend/.pytest_cache/
+Backend/__pycache__/
+Backend/**/*.pyc
+
+# Frontend
+Gestion-des-conges-AFRIX-GLOBAL/node_modules/
+Gestion-des-conges-AFRIX-GLOBAL/dist/
+Gestion-des-conges-AFRIX-GLOBAL/.angular/
+Gestion-des-conges-AFRIX-GLOBAL/.env
