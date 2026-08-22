@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { IconComponent } from '../../shared/icon/icon';
+import { loadActiveLeaveRequests, StoredLeaveRequest } from '../../shared/leave-storage';
 
 @Component({
   selector: 'app-home',
@@ -43,18 +44,18 @@ import { IconComponent } from '../../shared/icon/icon';
           </div>
           <div class="mt-6 grid grid-cols-2 gap-3">
             <div class="rounded-2xl bg-(--color-surface) p-4">
-              <p class="text-3xl font-bold text-(--color-primary)">18</p>
+              <p class="text-3xl font-bold text-(--color-primary)">{{ availableDays() }}</p>
               <p class="mt-1 text-sm text-(--color-text-secondary)">Jours disponibles</p>
             </div>
             <div class="rounded-2xl bg-(--color-surface) p-4">
-              <p class="text-3xl font-bold text-(--color-warning)">04</p>
+              <p class="text-3xl font-bold text-(--color-warning)">{{ pendingRequests() }}</p>
               <p class="mt-1 text-sm text-(--color-text-secondary)">Demandes en attente</p>
             </div>
           </div>
           <div class="mt-3 space-y-3 rounded-2xl bg-(--color-bg)/80 p-4">
-            <div class="flex items-center justify-between text-sm"><span class="text-(--color-text)">Congés approuvés</span><span class="font-semibold text-(--color-success)">72%</span></div>
-            <div class="h-2 overflow-hidden rounded-full bg-(--color-primary-light)/40"><div class="h-full w-[72%] rounded-full bg-(--color-success)"></div></div>
-            <div class="flex items-center gap-2 pt-2 text-xs text-(--color-text-secondary)"><span class="size-2 rounded-full bg-(--color-success)"></span>Les validations sont à jour</div>
+            <div class="flex items-center justify-between text-sm"><span class="text-(--color-text)">Congés approuvés</span><span class="font-semibold text-(--color-success)">{{ approvalRate() }}%</span></div>
+            <div class="h-2 overflow-hidden rounded-full bg-(--color-primary-light)/40"><div class="h-full rounded-full bg-(--color-success)" [style.width.%]="approvalRate()"></div></div>
+            <div class="flex items-center gap-2 pt-2 text-xs text-(--color-text-secondary)"><span class="size-2 rounded-full bg-(--color-success)"></span>{{ overviewMessage() }}</div>
           </div>
         </div>
       </div>
@@ -163,4 +164,41 @@ import { IconComponent } from '../../shared/icon/icon';
   `,
   styles: ``,
 })
-export class Home {}
+export class Home {
+  // Les demandes sont partagées avec le formulaire, l'historique et le détail.
+  requests = signal<StoredLeaveRequest[]>(loadActiveLeaveRequests());
+  private readonly annualAllowance = 18;
+
+  // Calcule le nombre de demandes encore en attente de décision.
+  pendingRequests = computed(() => this.requests().filter((request) => request.status === 'En attente').length);
+
+  // Calcule les jours déjà consommés par les demandes validées.
+  approvedDays = computed(() => this.requests()
+    .filter((request) => request.status === 'Validée')
+    .reduce((total, request) => total + this.duration(request), 0));
+
+  // Présente le solde disponible à partir du forfait annuel de démonstration.
+  availableDays = computed(() => Math.max(0, this.annualAllowance - this.approvedDays()));
+
+  // Calcule le taux de demandes validées parmi les demandes déjà traitées.
+  approvalRate = computed(() => {
+    const decidedRequests = this.requests().filter((request) => request.status !== 'En attente');
+    if (decidedRequests.length === 0) {
+      return 0;
+    }
+    return Math.round((decidedRequests.filter((request) => request.status === 'Validée').length / decidedRequests.length) * 100);
+  });
+
+  // Adapte le message de synthèse à l'état courant des demandes.
+  overviewMessage = computed(() => this.pendingRequests() > 0
+    ? `${this.pendingRequests()} demande(s) attendent une décision`
+    : 'Toutes les demandes sont à jour');
+
+  // Calcule le nombre de jours calendaires d'une demande.
+  private duration(request: StoredLeaveRequest): number {
+    const start = new Date(`${request.startDate}T00:00:00`);
+    const end = new Date(`${request.endDate}T00:00:00`);
+    const millisecondsPerDay = 24 * 60 * 60 * 1000;
+    return Math.max(0, Math.round((end.getTime() - start.getTime()) / millisecondsPerDay) + 1);
+  }
+}
