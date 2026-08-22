@@ -3,11 +3,11 @@ import { RenderMode, ServerRoute } from '@angular/ssr';
 export const serverRoutes: ServerRoute[] = [
   // Les références des demandes sont créées dans le navigateur et ne sont pas connues au build.
   {
-    path: 'conges/:id',
+    path: 'conges/historique',
     renderMode: RenderMode.Client,
   },
   {
-    path: 'conges/historique',
+    path: 'conges/:id',
     renderMode: RenderMode.Client,
   },
   {

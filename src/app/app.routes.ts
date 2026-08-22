@@ -3,11 +3,11 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
-   {
+  {
     path: '',
     loadComponent: () => import('./layout/site/site').then((m) => m.Site),
     children: [
-      { path: '', pathMatch: 'full',loadComponent: () => import('./features/home/home').then((m) => m.Home)},
+      { path: '', pathMatch: 'full', redirectTo: 'home' },
 
   {
     path: 'dashboard',
@@ -18,6 +18,16 @@ export const routes: Routes = [
     path: 'conges',
     loadComponent: () => import('./features/conge/conge').then((m) => m.default),
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'conges/historique',
+    loadComponent: () =>
+      import('./features/conge/conge-history').then((m) => m.default),
+  },
+  {
+    path: 'conges/:id',
+    loadComponent: () =>
+      import('./features/conge/conge-detail').then((m) => m.default),
   },
 
   {
@@ -118,6 +128,4 @@ export const routes: Routes = [
     path: '**',
     redirectTo: 'not-found',
   },
-
-  { path: '**', redirectTo: 'not-found' },
 ];
