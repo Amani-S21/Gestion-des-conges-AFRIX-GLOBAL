@@ -1,4 +1,4 @@
-﻿import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { Component, DestroyRef, inject, PLATFORM_ID, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { fromEvent } from 'rxjs';
@@ -13,9 +13,9 @@ import { IconComponent } from '../shared/icon/icon';
   template: `
   <header class="navbar-header fixed inset-x-0 top-0 z-40 w-full border-0 bg-(--color-header) px-4 py-3 text-white shadow-md transition-[background-color,backdrop-filter,box-shadow] duration-300 sm:px-6" [class.navbar-header-scrolled]="isScrolled()">
     <div class="card-header mx-auto mb-0 flex w-full max-w-7xl flex-wrap gap-4 sm:items-center sm:justify-between">
-      <a class="flex w-fit items-center gap-3 rounded-lg text-white no-underline transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" routerLink="/" aria-label="Afrix - Accueil" (click)="menuOpen.set(false)">
-        <span class="grid size-10 place-items-center rounded-xl border-2 border-white/70 bg-white text-lg font-bold text-(--color-header) shadow-sm" aria-hidden="true">A</span>
-        <span class="font-(--font-family-base) text-xl tracking-wide">Afrix global</span>
+      <a class="flex w-fit items-center gap-3 rounded-lg text-white no-underline transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" routerLink="/" aria-label="AfriPause - Accueil" (click)="menuOpen.set(false)">
+        <img src="assets/afrix.png" alt="AfriPause Logo" class="h-8 w-auto object-contain drop-shadow-sm" />
+        <span class="font-(--font-family-base) text-xl font-bold tracking-wide">AfriPause</span>
       </a>
 
       <button class="grid size-10 place-items-center rounded-xl border border-white/40 bg-white/10 text-white sm:hidden" type="button" [attr.aria-label]="menuOpen() ? 'Fermer le menu' : 'Ouvrir le menu'" [attr.aria-expanded]="menuOpen()" (click)="menuOpen.update((open) => !open)">
