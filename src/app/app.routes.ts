@@ -12,7 +12,18 @@ export const routes: Routes = [
   },
   {
     path: 'conges',
-    loadComponent: () => import('./features/conge/conge').then((m) => m.default),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/conges/pages/conges-list').then((m) => m.default),
+      },
+      {
+        path: 'nouvelle-demande',
+        loadComponent: () =>
+          import('./features/conges/pages/conge-form').then((m) => m.default),
+      },
+    ],
   },
   {
     path: 'users',

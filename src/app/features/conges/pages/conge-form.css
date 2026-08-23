@@ -1,0 +1,189 @@
+@keyframes formIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.5); }
+  70% { transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.conge-form-wrapper {
+  position: relative;
+  max-width: 480px;
+  margin: var(--space-2xl) auto;
+}
+
+.conge-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  background: var(--color-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 26px;
+  box-shadow: 0 12px 40px rgba(61, 124, 140, 0.15);
+  animation: formIn 0.45s cubic-bezier(0.34, 1.2, 0.64, 1);
+  transition: var(--transition-smooth);
+}
+
+.conge-form.is-blurred {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+}
+
+.conge-form-header {
+  margin-bottom: var(--space-sm);
+}
+
+.conge-form-accent {
+  display: inline-block;
+  width: 44px;
+  height: 5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+  margin-bottom: var(--space-sm);
+}
+
+.conge-form-title {
+  font-family: var(--font-family-base);
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0;
+  background: linear-gradient(120deg, var(--color-text) 40%, var(--color-primary) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.conge-form-dates {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field-label {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+}
+
+.field-select,
+.field-textarea {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: var(--transition-smooth);
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--color-primary) 50%), linear-gradient(135deg, var(--color-primary) 50%, transparent 50%);
+  background-position: calc(100% - 18px) center, calc(100% - 13px) center;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.field-select:focus,
+.field-textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(61, 124, 140, 0.15);
+  transform: translateY(-1px);
+}
+
+.field-error {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-small);
+  color: var(--color-danger);
+  animation: formIn 0.2s ease;
+}
+
+.duration-badge {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-small);
+  font-weight: 600;
+  color: var(--color-primary);
+  background: rgba(61, 124, 140, 0.12);
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  animation: formIn 0.25s ease;
+}
+
+.duration-badge app-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.conge-form-actions {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+  margin-top: var(--space-sm);
+}
+
+.success-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  text-align: center;
+}
+
+.success-circle {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--color-success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  box-shadow: 0 8px 24px rgba(111, 191, 139, 0.4);
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  outline: none;
+}
+
+.success-circle:focus-visible {
+  box-shadow: 0 8px 24px rgba(111, 191, 139, 0.4), 0 0 0 4px rgba(111, 191, 139, 0.35);
+}
+
+.success-circle app-icon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.success-text {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-h2);
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.success-status {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-small);
+  color: var(--color-warning);
+  background: rgba(232, 168, 85, 0.15);
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+}

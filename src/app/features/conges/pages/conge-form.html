@@ -1,0 +1,64 @@
+<div class="conge-form-wrapper">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="conge-form" [class.is-blurred]="submitted()">
+    <div class="conge-form-header">
+      <span class="conge-form-accent"></span>
+      <h1 class="conge-form-title">Nouvelle demande de congé</h1>
+    </div>
+
+    <label class="field">
+      <span class="field-label">Type de congé *</span>
+      <select formControlName="type" class="field-select">
+        <option value="">Sélectionner...</option>
+        <option value="paye">Congé payé</option>
+        <option value="maladie">Maladie</option>
+        <option value="sans-solde">Sans solde</option>
+      </select>
+      @if (form.get('type')?.invalid && form.get('type')?.touched) {
+        <span class="field-error">Le type de congé est obligatoire.</span>
+      }
+    </label>
+
+    <div class="conge-form-dates">
+      <app-input label="Date de début *" type="date" formControlName="startDate"></app-input>
+      <app-input label="Date de fin *" type="date" formControlName="endDate"></app-input>
+    </div>
+
+    @if (form.get('startDate')?.invalid && form.get('startDate')?.touched) {
+      <span class="field-error">La date de début est obligatoire.</span>
+    }
+    @if (form.get('endDate')?.invalid && form.get('endDate')?.touched) {
+      <span class="field-error">La date de fin est obligatoire.</span>
+    }
+    @if (form.errors?.['dateRangeInvalid']) {
+      <span class="field-error">La date de fin doit être après la date de début.</span>
+    }
+
+    @if (duration(); as d) {
+      <span class="duration-badge">
+        <app-icon name="calendar"></app-icon>
+        {{ d }} jour{{ d > 1 ? 's' : '' }}
+      </span>
+    }
+
+    <label class="field">
+      <span class="field-label">Commentaire</span>
+      <textarea formControlName="comment" class="field-textarea" rows="3" placeholder="Optionnel"></textarea>
+    </label>
+
+    <div class="conge-form-actions">
+      <app-button variant="secondary" type="button" (click)="onCancel()">Annuler</app-button>
+      <app-button type="submit">Envoyer</app-button>
+    </div>
+  </form>
+
+  @if (submitted()) {
+    <div class="success-overlay">
+      <div class="success-circle" tabindex="-1" #successIcon>
+        <app-icon name="check"></app-icon>
+      </div>
+      <p class="success-text">Demande envoyée avec succès</p>
+      <span class="success-status">Statut : En attente</span>
+      <app-button (click)="submitted.set(false)">Nouvelle demande</app-button>
+    </div>
+  }
+</div>
