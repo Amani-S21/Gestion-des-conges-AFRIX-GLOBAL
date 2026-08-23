@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { Layout } from './layout/layout';
+import { AuthGuard } from './core/guards/auth.guard';
+import { RoleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
   // ==========================================
@@ -17,20 +19,6 @@ export const routes: Routes = [
         pathMatch: 'full',
         loadComponent: () =>
           import('./features/home/home').then((m) => m.Home),
-      },
-
-      // Tableau de bord public : /dashboard
-      {
-        path: 'dashboard',
-        loadComponent: () =>
-          import('./features/dashboard/dashboard').then((m) => m.default),
-      },
-
-      // Congés public : /conges
-      {
-        path: 'conges',
-        loadComponent: () =>
-          import('./features/conge/conge').then((m) => m.default),
       },
 
       // Accueil : /home
@@ -69,6 +57,7 @@ export const routes: Routes = [
         path: 'dashboard',
         loadComponent: () =>
           import('./features/dashboard/dashboard').then((m) => m.default),
+        canActivate: [AuthGuard],
       },
 
       // /app/conges
@@ -76,16 +65,21 @@ export const routes: Routes = [
         path: 'conges',
         loadComponent: () =>
           import('./features/conge/conge').then((m) => m.default),
+        canActivate: [AuthGuard],
       },
 
+      // ==========================================
+      // TA TÂCHE #18
       // /app/conges/:id
       // Exemple : /app/conges/1
+      // ==========================================
       {
         path: 'conges/:id',
         loadComponent: () =>
           import('./features/conge-detail/conge-detail').then(
             (m) => m.default,
           ),
+        canActivate: [AuthGuard],
       },
 
       // /app/users
@@ -93,6 +87,10 @@ export const routes: Routes = [
         path: 'users',
         loadComponent: () =>
           import('./features/users/users').then((m) => m.default),
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: ['HR_ADMIN'],
+        },
       },
 
       // /app/notifications
@@ -102,6 +100,7 @@ export const routes: Routes = [
           import('./features/notifications/notifications').then(
             (m) => m.Notifications,
           ),
+        canActivate: [AuthGuard],
       },
 
       // /app/rapport
@@ -109,6 +108,10 @@ export const routes: Routes = [
         path: 'rapport',
         loadComponent: () =>
           import('./features/rapport/rapport').then((m) => m.Rapport),
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: ['HR_ADMIN'],
+        },
       },
 
       // /app/soldes
@@ -116,6 +119,7 @@ export const routes: Routes = [
         path: 'soldes',
         loadComponent: () =>
           import('./features/soldes/soldes').then((m) => m.Soldes),
+        canActivate: [AuthGuard],
       },
 
       // /app/validation
@@ -125,8 +129,24 @@ export const routes: Routes = [
           import('./features/validation/validation').then(
             (m) => m.Validation,
           ),
+        canActivate: [AuthGuard, RoleGuard],
+        data: {
+          roles: ['MANAGER', 'HR_ADMIN'],
+        },
       },
     ],
+  },
+
+  // ==========================================
+  // PAGE 403
+  // ==========================================
+  {
+    path: 'access-denied',
+    loadComponent: () =>
+      import('./features/access-denied/access-denied').then(
+        (m) => m.default,
+      ),
+    canActivate: [AuthGuard],
   },
 
   // ==========================================
@@ -138,7 +158,9 @@ export const routes: Routes = [
       import('./features/not-found/not-found').then((m) => m.default),
   },
 
-  // Toute URL inconnue
+  // ==========================================
+  // URL INCONNUE
+  // ==========================================
   {
     path: '**',
     redirectTo: 'not-found',
