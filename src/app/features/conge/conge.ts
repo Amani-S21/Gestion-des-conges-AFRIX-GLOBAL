@@ -36,7 +36,7 @@ type LeaveRequest = StoredLeaveRequest;
       </label>
 
       <div class="flex flex-wrap items-center justify-between gap-4 border-t border-(--color-text)/10 pt-5">
-        <a class="inline-flex items-center gap-2 text-(--color-primary) no-underline" routerLink="/dashboard">
+        <a class="inline-flex items-center gap-2 text-(--color-primary) no-underline" routerLink="/app/dashboard">
           <app-icon name="chevron" />
           Retour à mon espace
         </a>
@@ -47,8 +47,7 @@ type LeaveRequest = StoredLeaveRequest;
       </div>
     </form>
 
-    <!-- Accès unique à la page qui regroupe toutes les demandes. -->
-    <a class="btn btn-secondary mt-5 no-underline" routerLink="/conges/historique">
+    <a class="btn btn-secondary mt-5 no-underline" routerLink="/app/conges/historique">
       HISTORIQUE
       <app-icon name="chevron" />
     </a>
@@ -68,42 +67,37 @@ type LeaveRequest = StoredLeaveRequest;
 
       <dl class="grid gap-3 rounded-2xl bg-(--color-surface) p-4 text-sm">
         <div class="flex items-center justify-between gap-4">
-          <dt class="text-(--color-text-secondary)">Référence</dt>
-          <dd class="font-semibold text-(--color-text)">{{ requestReference() }}</dd>
+          <dt class="shrink-0 text-(--color-text-secondary)">Référence</dt>
+          <dd class="break-words text-right font-semibold text-(--color-text)">{{ requestReference() }}</dd>
         </div>
         <div class="flex items-center justify-between gap-4">
-          <dt class="text-(--color-text-secondary)">Statut</dt>
+          <dt class="shrink-0 text-(--color-text-secondary)">Statut</dt>
           <dd class="rounded-full bg-(--color-warning)/15 px-3 py-1 font-semibold text-(--color-warning)">{{ requestStatus() }}</dd>
         </div>
         <div class="flex items-center justify-between gap-4">
-          <dt class="text-(--color-text-secondary)">Période</dt>
-            <dd class="text-right font-semibold text-(--color-text)">{{ requestStartDate() }} au {{ requestEndDate() }}</dd>
+          <dt class="shrink-0 text-(--color-text-secondary)">Période</dt>
+          <dd class="break-words text-right font-semibold text-(--color-text)">{{ requestStartDate() }} au {{ requestEndDate() }}</dd>
         </div>
-            @if (requestReason()) {
+        @if (requestReason()) {
           <div class="flex items-start justify-between gap-4">
-            <dt class="text-(--color-text-secondary)">Motif</dt>
-                <dd class="max-w-[65%] text-right text-(--color-text)">{{ requestReason() }}</dd>
+            <dt class="shrink-0 text-(--color-text-secondary)">Motif</dt>
+            <dd class="max-w-[65%] break-words text-right text-(--color-text)">{{ requestReason() }}</dd>
           </div>
         }
       </dl>
 
-      <div class="confirmation-actions flex flex-nowrap gap-2">
-        <a class="btn min-w-0 flex-1 px-3 py-2 text-sm no-underline" routerLink="/conges/historique" (click)="confirmationOpen.set(false)">
+      <div class="confirmation-actions flex flex-wrap gap-2">
+        <a class="btn min-w-0 flex-1 px-3 py-2 text-sm no-underline" routerLink="/app/conges/historique" (click)="confirmationOpen.set(false)">
           Voir l'historique
           <app-icon name="chevron" />
         </a>
-        <a class="btn btn-secondary min-w-0 flex-1 px-3 py-2 text-sm no-underline" routerLink="/dashboard" (click)="confirmationOpen.set(false)">Mon espace</a>
-        <button class="btn btn-secondary px-4 py-2 text-sm" type="button" (click)="confirmationOpen.set(false)">OK</button>
+        <a class="btn btn-secondary min-w-0 flex-1 px-3 py-2 text-sm no-underline" routerLink="/app/dashboard" (click)="confirmationOpen.set(false)">Mon espace</a>
+        <button class="btn btn-secondary min-w-0 flex-1 px-4 py-2 text-sm" type="button" (click)="confirmationOpen.set(false)">OK</button>
       </div>
     </div>
   </app-modal>
   `,
   styleUrls: ['../../shared/card/card.css', '../../shared/input/input.css', '../../shared/modal/modal.css'],
-  styles: `
-    .confirmation-actions .btn {
-      white-space: nowrap;
-    }
-  `,
 })
 export default class Conge {
   startDate = '';
@@ -138,7 +132,6 @@ export default class Conge {
 
     this.requests.update((requests) => {
       const updatedRequests = [request, ...requests];
-
       saveLeaveRequests(updatedRequests);
       return updatedRequests;
     });

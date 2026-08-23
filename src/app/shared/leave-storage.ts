@@ -6,7 +6,7 @@ export interface StoredLeaveRequest {
   startDate: string;
   endDate: string;
   reason: string;
-  status: 'En attente' | 'Validée' | 'Refusée';
+  status: 'En attente' | 'Validée' | 'Refusée' | 'Annulée';
   createdAt?: number;
 }
 

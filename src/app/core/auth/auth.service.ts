@@ -9,12 +9,16 @@ export interface CurrentUser {
   role: UserRole;
 }
 
+// Vrai uniquement dans le navigateur : évite les erreurs pendant le rendu serveur (SSR).
+const hasLocalStorage = typeof localStorage !== 'undefined';
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private userSubject = new BehaviorSubject<CurrentUser | null>(null);
 
   constructor() {
     // Try to hydrate from localStorage if present (simple client-side mock)
+    if (!hasLocalStorage) return;
     const raw = localStorage.getItem('afrix_user');
     if (raw) {
       try {
@@ -45,12 +49,14 @@ export class AuthService {
   // Mock login for development (replace with real API call)
   login(user: CurrentUser) {
     this.userSubject.next(user);
-    localStorage.setItem('afrix_user', JSON.stringify(user));
+    if (hasLocalStorage) localStorage.setItem('afrix_user', JSON.stringify(user));
   }
 
   logout() {
     this.userSubject.next(null);
-    localStorage.removeItem('afrix_user');
-    localStorage.removeItem('afrix_token');
+    if (hasLocalStorage) {
+      localStorage.removeItem('afrix_user');
+      localStorage.removeItem('afrix_token');
+    }
   }
 }

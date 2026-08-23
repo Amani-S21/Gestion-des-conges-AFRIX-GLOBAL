@@ -10,3 +10,5 @@ Gestion-des-conges-AFRIX-GLOBAL/node_modules/
 Gestion-des-conges-AFRIX-GLOBAL/dist/
 Gestion-des-conges-AFRIX-GLOBAL/.angular/
 Gestion-des-conges-AFRIX-GLOBAL/.env
+.angular/
+node_modules/

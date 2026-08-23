@@ -27,6 +27,8 @@
 
 /* Boite principale contenant le contenu de la modale */
 .modal-box {
+  max-height: 85vh;
+  overflow-y: auto;
   background: var(--color-bg);
   border-radius: 22px;
   padding: 1.5rem;

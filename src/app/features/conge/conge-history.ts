@@ -21,10 +21,11 @@ type LeaveStatus = StoredLeaveRequest['status'];
       </div>
 
       <!-- Résumé rapide des demandes par statut. -->
-      <div class="mb-6 grid gap-3 sm:grid-cols-3">
+      <div class="mb-6 grid gap-3 sm:grid-cols-4">
         <div class="rounded-2xl bg-(--color-warning)/10 p-4"><p class="text-sm text-(--color-text-secondary)">En attente</p><p class="mt-1 text-2xl font-bold text-(--color-warning)">{{ countByStatus('En attente') }}</p></div>
         <div class="rounded-2xl bg-(--color-success)/10 p-4"><p class="text-sm text-(--color-text-secondary)">Validées</p><p class="mt-1 text-2xl font-bold text-(--color-success)">{{ countByStatus('Validée') }}</p></div>
         <div class="rounded-2xl bg-(--color-danger)/10 p-4"><p class="text-sm text-(--color-text-secondary)">Refusées</p><p class="mt-1 text-2xl font-bold text-(--color-danger)">{{ countByStatus('Refusée') }}</p></div>
+        <div class="rounded-2xl bg-(--color-text)/10 p-4"><p class="text-sm text-(--color-text-secondary)">Annulées</p><p class="mt-1 text-2xl font-bold text-(--color-text-secondary)">{{ countByStatus('Annulée') }}</p></div>
       </div>
 
       <!-- Liste complète des demandes conservées dans l'historique. -->
@@ -40,21 +41,21 @@ type LeaveStatus = StoredLeaveRequest['status'];
               <div>
                 <div class="flex flex-wrap items-center gap-3">
                   <h2 class="font-semibold text-(--color-text)">{{ request.reference }}</h2>
-                  <span class="rounded-full px-3 py-1 text-xs font-semibold" [class.bg-(--color-warning)/15]="request.status === 'En attente'" [class.text-(--color-warning)]="request.status === 'En attente'" [class.bg-(--color-success)/15]="request.status === 'Validée'" [class.text-(--color-success)]="request.status === 'Validée'" [class.bg-(--color-danger)/15]="request.status === 'Refusée'" [class.text-(--color-danger)]="request.status === 'Refusée'">{{ request.status }}</span>
+                  <span class="rounded-full px-3 py-1 text-xs font-semibold" [class.bg-(--color-warning)/15]="request.status === 'En attente'" [class.text-(--color-warning)]="request.status === 'En attente'" [class.bg-(--color-success)/15]="request.status === 'Validée'" [class.text-(--color-success)]="request.status === 'Validée'" [class.bg-(--color-danger)/15]="request.status === 'Refusée'" [class.text-(--color-danger)]="request.status === 'Refusée'" [class.bg-(--color-text)/10]="request.status === 'Annulée'" [class.text-(--color-text-secondary)]="request.status === 'Annulée'">{{ request.status }}</span>
                 </div>
                 <p class="mt-2 text-sm text-(--color-text-secondary)">Du {{ request.startDate }} au {{ request.endDate }}</p>
                 @if (request.reason) {
                   <p class="mt-1 text-sm text-(--color-text-secondary)">{{ request.reason }}</p>
                 }
               </div>
-              <a class="btn btn-secondary no-underline" [routerLink]="['/conges', request.reference]">Voir le détail <app-icon name="chevron" /></a>
+              <a class="btn btn-secondary no-underline" [routerLink]="['/app/conges', request.reference]">Voir le détail <app-icon name="chevron" /></a>
             </article>
           }
         </section>
       }
 
       <!-- Retour vers le formulaire de nouvelle demande. -->
-      <a class="mt-6 inline-flex items-center gap-2 text-(--color-primary) no-underline" routerLink="/conges"><app-icon name="chevron" /> Nouvelle demande</a>
+      <a class="mt-6 inline-flex items-center gap-2 text-(--color-primary) no-underline" routerLink="/app/conges"><app-icon name="chevron" /> Nouvelle demande</a>
     </main>
   `,
   styleUrls: ['../../shared/card/card.css', '../../shared/button/button.css'],
