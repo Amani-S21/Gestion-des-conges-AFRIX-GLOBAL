@@ -1,260 +1,472 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import {
+  loadActiveLeaveRequests,
+  saveLeaveRequests,
+  StoredLeaveRequest,
+} from '../../shared/leave-storage';
 import { IconComponent } from '../../shared/icon/icon';
 
-type Statut = 'en_attente' | 'approuvee' | 'refusee' | 'annulee';
+type LeaveStatus = 'En attente' | 'Validée' | 'Refusée';
+
+type LeaveRequest = StoredLeaveRequest;
 
 @Component({
   selector: 'app-conge-detail',
-  imports: [RouterLink, IconComponent],
+  imports: [FormsModule, IconComponent, RouterLink],
   template: `
-    <div class="p-6">
+    <main
+      class="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6 lg:px-8"
+      aria-labelledby="detail-title"
+    >
+      @if (request()) {
+        <!-- En-tête -->
+        <div class="mb-8 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p
+              class="text-sm font-semibold uppercase tracking-[0.18em] text-(--color-primary)"
+            >
+              Détail de la demande
+            </p>
 
-      <!-- En-tête -->
-      <div class="mb-6">
-        <a
-          routerLink="/app/conges"
-          class="inline-flex items-center gap-2 text-sm text-(--color-text-secondary)"
-        >
-          <app-icon name="chevron"></app-icon>
-          Retour à mes demandes
-        </a>
-
-        <h1 class="mt-4 text-2xl font-bold text-(--color-text)">
-          Détail de la demande
-        </h1>
-
-        <p class="mt-1 text-sm text-(--color-text-secondary)">
-          Consultez les informations et le suivi de votre demande de congé.
-        </p>
-      </div>
-
-      <!-- Informations de la demande -->
-      <section class="mb-6 rounded-2xl bg-(--color-surface) p-6">
-        <div class="mb-5 flex items-center justify-between gap-4">
-          <h2 class="text-lg font-semibold text-(--color-text)">
-            Informations de la demande
-          </h2>
+            <h1
+              id="detail-title"
+              class="mt-2 text-3xl font-bold text-(--color-text)"
+            >
+              {{ request()!.reference }}
+            </h1>
+          </div>
 
           <span
-            class="rounded-full px-3 py-1 text-sm font-medium"
-            [class.bg-(--color-warning)/20]="statut === 'en_attente'"
-            [class.text-(--color-warning)]="statut === 'en_attente'"
-            [class.bg-(--color-success)/20]="statut === 'approuvee'"
-            [class.text-(--color-success)]="statut === 'approuvee'"
-            [class.bg-(--color-danger)/20]="statut === 'refusee'"
-            [class.text-(--color-danger)]="statut === 'refusee'"
+            class="rounded-full px-3 py-1 text-sm font-semibold"
+            [class.bg-(--color-warning)/15]="request()!.status === 'En attente'"
+            [class.text-(--color-warning)]="request()!.status === 'En attente'"
+            [class.bg-(--color-success)/15]="request()!.status === 'Validée'"
+            [class.text-(--color-success)]="request()!.status === 'Validée'"
+            [class.bg-(--color-danger)/15]="request()!.status === 'Refusée'"
+            [class.text-(--color-danger)]="request()!.status === 'Refusée'"
           >
-            {{ libelleStatut }}
+            {{ request()!.status }}
           </span>
         </div>
 
-        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- FORMULAIRE DE MODIFICATION -->
+        @if (editing()) {
+          <section class="card" aria-labelledby="edit-title">
+            <h2
+              id="edit-title"
+              class="text-xl font-bold text-(--color-text)"
+            >
+              Modifier la demande
+            </h2>
 
-          <div>
-            <p class="text-sm text-(--color-text-secondary)">
-              Référence
+            <p class="mt-2 text-(--color-text-secondary)">
+              Modifiez les informations de votre demande puis enregistrez les
+              changements.
             </p>
-            <p class="mt-1 font-medium text-(--color-text)">
-              DEM-{{ demandeId }}
-            </p>
-          </div>
 
-          <div>
-            <p class="text-sm text-(--color-text-secondary)">
-              Type de congé
-            </p>
-            <p class="mt-1 font-medium text-(--color-text)">
-              Congé annuel
-            </p>
-          </div>
+            <form
+              class="mt-6 grid gap-6"
+              #editForm="ngForm"
+              (ngSubmit)="saveModification(editForm)"
+            >
+              <!-- Dates -->
+              <div class="grid gap-5 sm:grid-cols-2">
+                <label class="field">
+                  <span class="field-label">Date de début</span>
 
-          <div>
-            <p class="text-sm text-(--color-text-secondary)">
-              Date de début
-            </p>
-            <p class="mt-1 font-medium text-(--color-text)">
-              25 août 2026
-            </p>
-          </div>
+                  <input
+                    class="field-input"
+                    type="date"
+                    name="startDate"
+                    [(ngModel)]="editStartDate"
+                    required
+                    #startDateModel="ngModel"
+                  />
 
-          <div>
-            <p class="text-sm text-(--color-text-secondary)">
-              Date de fin
-            </p>
-            <p class="mt-1 font-medium text-(--color-text)">
-              30 août 2026
-            </p>
-          </div>
+                  @if (
+                    startDateModel.invalid &&
+                    (startDateModel.dirty || startDateModel.touched)
+                  ) {
+                    <p class="mt-1 text-sm text-(--color-danger)">
+                      La date de début est obligatoire.
+                    </p>
+                  }
+                </label>
 
-          <div>
-            <p class="text-sm text-(--color-text-secondary)">
-              Durée
-            </p>
-            <p class="mt-1 font-medium text-(--color-text)">
-              6 jours
-            </p>
-          </div>
+                <label class="field">
+                  <span class="field-label">Date de fin</span>
 
-          <div>
-            <p class="text-sm text-(--color-text-secondary)">
-              Date de soumission
-            </p>
-            <p class="mt-1 font-medium text-(--color-text)">
-              20 août 2026
-            </p>
-          </div>
+                  <input
+                    class="field-input"
+                    type="date"
+                    name="endDate"
+                    [(ngModel)]="editEndDate"
+                    required
+                    #endDateModel="ngModel"
+                  />
 
-        </div>
-      </section>
+                  @if (
+                    endDateModel.invalid &&
+                    (endDateModel.dirty || endDateModel.touched)
+                  ) {
+                    <p class="mt-1 text-sm text-(--color-danger)">
+                      La date de fin est obligatoire.
+                    </p>
+                  }
+                </label>
+              </div>
 
-      <!-- Historique -->
-      <section class="mb-6 rounded-2xl bg-(--color-surface) p-6">
-        <h2 class="mb-5 text-lg font-semibold text-(--color-text)">
-          Historique
-        </h2>
+              <!-- Vérification de l'ordre des dates -->
+              @if (
+                editStartDate &&
+                editEndDate &&
+                editStartDate > editEndDate
+              ) {
+                <p
+                  class="rounded-xl bg-(--color-danger)/10 p-3 text-sm font-semibold text-(--color-danger)"
+                >
+                  La date de fin doit être postérieure ou égale à la date de
+                  début.
+                </p>
+              }
 
-        <div class="space-y-5">
+              <!-- Motif -->
+              <label class="field">
+                <span class="field-label">Motif</span>
 
-          <div class="flex gap-4">
-            <div
-              class="mt-1 h-3 w-3 shrink-0 rounded-full bg-(--color-success)"
-            ></div>
+                <textarea
+                  class="field-input min-h-32 resize-y"
+                  name="reason"
+                  [(ngModel)]="editReason"
+                  placeholder="Ajoutez une précision facultative"
+                ></textarea>
+              </label>
 
-            <div>
-              <p class="font-medium text-(--color-text)">
-                Demande créée
+              <!-- Actions -->
+              <div
+                class="flex flex-wrap gap-3 border-t border-(--color-text)/10 pt-5"
+              >
+                <button
+                  class="btn"
+                  type="submit"
+                  [disabled]="
+                    editForm.invalid ||
+                    editStartDate > editEndDate
+                  "
+                >
+                  <app-icon name="check" />
+                  Enregistrer les modifications
+                </button>
+
+                <button
+                  class="btn btn-secondary"
+                  type="button"
+                  (click)="cancelEdit()"
+                >
+                  Annuler
+                </button>
+              </div>
+            </form>
+          </section>
+        } @else {
+          <!-- Informations de la demande -->
+          <section class="card" aria-labelledby="information-title">
+            <h2
+              id="information-title"
+              class="text-xl font-bold text-(--color-text)"
+            >
+              Informations de la demande
+            </h2>
+
+            <dl class="mt-6 grid gap-5 sm:grid-cols-2">
+              <div>
+                <dt class="text-sm text-(--color-text-secondary)">
+                  Employé
+                </dt>
+                <dd class="mt-1 font-semibold text-(--color-text)">Moi</dd>
+              </div>
+
+              <div>
+                <dt class="text-sm text-(--color-text-secondary)">Type</dt>
+                <dd class="mt-1 font-semibold text-(--color-text)">
+                  Congé annuel
+                </dd>
+              </div>
+
+              <div>
+                <dt class="text-sm text-(--color-text-secondary)">
+                  Période
+                </dt>
+                <dd class="mt-1 font-semibold text-(--color-text)">
+                  Du {{ request()!.startDate }} au {{ request()!.endDate }}
+                </dd>
+              </div>
+
+              <div>
+                <dt class="text-sm text-(--color-text-secondary)">
+                  Durée estimée
+                </dt>
+                <dd class="mt-1 font-semibold text-(--color-text)">
+                  {{ duration() }} jour(s)
+                </dd>
+              </div>
+
+              <div class="sm:col-span-2">
+                <dt class="text-sm text-(--color-text-secondary)">
+                  Commentaire
+                </dt>
+
+                <dd class="mt-1 text-(--color-text)">
+                  {{ request()!.reason || 'Aucun commentaire' }}
+                </dd>
+              </div>
+            </dl>
+          </section>
+
+          <!-- Action Modifier -->
+          @if (canEdit()) {
+            <section class="card mt-6" aria-labelledby="edit-action-title">
+              <h2
+                id="edit-action-title"
+                class="text-xl font-bold text-(--color-text)"
+              >
+                Modifier la demande
+              </h2>
+
+              <p class="mt-2 text-(--color-text-secondary)">
+                Cette demande est encore en attente. Vous pouvez modifier ses
+                informations.
               </p>
 
-              <p class="text-sm text-(--color-text-secondary)">
-                20 août 2026 à 09:30
-              </p>
-            </div>
-          </div>
+              <button
+                class="btn mt-5"
+                type="button"
+                (click)="startEdit()"
+              >
+                <app-icon name="check" />
+                Modifier la demande
+              </button>
+            </section>
+          }
 
-          <div class="flex gap-4">
-            <div
-              class="mt-1 h-3 w-3 shrink-0 rounded-full bg-(--color-warning)"
-            ></div>
+          <!-- Décision -->
+          @if (canDecide()) {
+            <section class="card mt-6" aria-labelledby="decision-title">
+              <h2
+                id="decision-title"
+                class="text-xl font-bold text-(--color-text)"
+              >
+                Décision
+              </h2>
 
-            <div>
-              <p class="font-medium text-(--color-text)">
-                Demande envoyée pour validation
-              </p>
-
-              <p class="text-sm text-(--color-text-secondary)">
-                20 août 2026 à 09:35
-              </p>
-            </div>
-          </div>
-
-          <div class="flex gap-4">
-            <div
-              class="mt-1 h-3 w-3 shrink-0 rounded-full bg-(--color-warning)"
-            ></div>
-
-            <div>
-              <p class="font-medium text-(--color-text)">
-                En attente de validation
+              <p class="mt-2 text-(--color-text-secondary)">
+                Choisissez l'action à appliquer à cette demande.
               </p>
 
-              <p class="text-sm text-(--color-text-secondary)">
-                Statut actuel
-              </p>
-            </div>
-          </div>
+              <div class="mt-5 flex flex-wrap gap-3">
+                <button
+                  class="btn btn-secondary"
+                  type="button"
+                  (click)="decide('Refusée')"
+                >
+                  <app-icon name="close" />
+                  Rejeter la demande
+                </button>
 
-        </div>
-      </section>
-
-      <!-- Commentaires -->
-      <section class="mb-6 rounded-2xl bg-(--color-surface) p-6">
-        <h2 class="mb-5 text-lg font-semibold text-(--color-text)">
-          Commentaires
-        </h2>
-
-        <p class="text-sm text-(--color-text-secondary)">
-          Aucun commentaire pour le moment.
-        </p>
-      </section>
-
-      <!-- Actions -->
-      <section class="rounded-2xl bg-(--color-surface) p-6">
-        <h2 class="mb-5 text-lg font-semibold text-(--color-text)">
-          Actions disponibles
-        </h2>
-
-        @if (peutModifier) {
-          <button
-            type="button"
-            class="mr-3 rounded-xl bg-(--color-primary) px-4 py-2 font-medium text-(--color-bg)"
-          >
-            Modifier la demande
-          </button>
+                <button
+                  class="btn"
+                  type="button"
+                  (click)="decide('Validée')"
+                >
+                  <app-icon name="check" />
+                  Valider la demande
+                </button>
+              </div>
+            </section>
+          } @else {
+            <p
+              class="mt-6 rounded-2xl bg-(--color-surface) p-5 font-semibold text-(--color-text-secondary)"
+            >
+              Cette demande a déjà été traitée.
+            </p>
+          }
         }
-
-        @if (peutAnnuler) {
-          <button
-            type="button"
-            class="rounded-xl border border-(--color-danger) px-4 py-2 font-medium text-(--color-danger)"
+      } @else {
+        <!-- Demande introuvable -->
+        <section class="card text-center">
+          <h1
+            id="detail-title"
+            class="text-2xl font-bold text-(--color-text)"
           >
-            Annuler la demande
-          </button>
-        }
+            Demande introuvable
+          </h1>
 
-        @if (!peutModifier && !peutAnnuler) {
-          <p class="text-sm text-(--color-text-secondary)">
-            Aucune action n'est disponible pour cette demande.
+          <p class="mt-2 text-(--color-text-secondary)">
+            Cette demande n'existe pas ou n'est plus disponible.
           </p>
-        }
-      </section>
+        </section>
+      }
 
-    </div>
+      <!-- Retour -->
+      <a
+        class="mt-6 inline-flex items-center gap-2 text-(--color-primary) no-underline"
+        routerLink="/app/conges"
+      >
+        <app-icon name="chevron" />
+        Retour à mes demandes
+      </a>
+
+      <!-- Message de confirmation -->
+      @if (modificationMessage()) {
+        <div
+          class="mt-6 rounded-2xl bg-(--color-success)/10 p-4 font-semibold text-(--color-success)"
+        >
+          {{ modificationMessage() }}
+        </div>
+      }
+    </main>
   `,
+  styleUrls: [
+    '../../shared/card/card.css',
+    '../../shared/button/button.css',
+    '../../shared/input/input.css',
+  ],
 })
 export default class CongeDetail {
-  private route = inject(ActivatedRoute);
+  private readonly route = inject(ActivatedRoute);
 
-  /**
-   * ID récupéré depuis l'URL :
-   * /app/conges/1
-   */
-  demandeId =
-    this.route.snapshot.paramMap.get('id') ?? 'inconnu';
+  request = signal<LeaveRequest | null>(this.loadRequest());
 
-  /**
-   * Pour l'instant, le statut est simulé.
-   * Il sera remplacé par le statut provenant du backend.
-   */
-  statut: Statut = 'en_attente';
+  editing = signal(false);
 
-  get libelleStatut(): string {
-    switch (this.statut) {
-      case 'en_attente':
-        return 'En attente';
+  modificationMessage = signal('');
 
-      case 'approuvee':
-        return 'Approuvée';
+  editStartDate = '';
+  editEndDate = '';
+  editReason = '';
 
-      case 'refusee':
-        return 'Refusée';
+  private loadRequest(): LeaveRequest | null {
+    const reference = this.route.snapshot.paramMap.get('id');
 
-      case 'annulee':
-        return 'Annulée';
+    if (!reference) {
+      return null;
     }
+
+    return (
+      loadActiveLeaveRequests().find(
+        (request) => request.reference === reference,
+      ) ?? null
+    );
   }
 
-  /**
-   * Une demande en attente peut être modifiée.
-   */
-  get peutModifier(): boolean {
-    return this.statut === 'en_attente';
+  canEdit(): boolean {
+    return this.request()?.status === 'En attente';
   }
 
-  /**
-   * Une demande en attente peut être annulée.
-   */
-  get peutAnnuler(): boolean {
-    return this.statut === 'en_attente';
+  canDecide(): boolean {
+    return this.request()?.status === 'En attente';
+  }
+
+  startEdit(): void {
+    const currentRequest = this.request();
+
+    if (!currentRequest || !this.canEdit()) {
+      return;
+    }
+
+    this.editStartDate = currentRequest.startDate;
+    this.editEndDate = currentRequest.endDate;
+    this.editReason = currentRequest.reason;
+
+    this.modificationMessage.set('');
+    this.editing.set(true);
+  }
+
+  cancelEdit(): void {
+    this.editing.set(false);
+    this.modificationMessage.set('');
+  }
+
+  saveModification(editForm: NgForm): void {
+    const currentRequest = this.request();
+
+    if (!currentRequest || !this.canEdit() || editForm.invalid) {
+      return;
+    }
+
+    if (this.editStartDate > this.editEndDate) {
+      return;
+    }
+
+    const updatedRequest: LeaveRequest = {
+      ...currentRequest,
+      startDate: this.editStartDate,
+      endDate: this.editEndDate,
+      reason: this.editReason,
+    };
+
+    const requests = loadActiveLeaveRequests();
+
+    saveLeaveRequests(
+      requests.map((request) =>
+        request.reference === updatedRequest.reference
+          ? updatedRequest
+          : request,
+      ),
+    );
+
+    this.request.set(updatedRequest);
+    this.editing.set(false);
+
+    this.modificationMessage.set(
+      'La demande a été modifiée avec succès.',
+    );
+  }
+
+  duration(): number {
+    const currentRequest = this.request();
+
+    if (!currentRequest) {
+      return 0;
+    }
+
+    const start = new Date(`${currentRequest.startDate}T00:00:00`);
+    const end = new Date(`${currentRequest.endDate}T00:00:00`);
+
+    const millisecondsPerDay = 24 * 60 * 60 * 1000;
+
+    return Math.max(
+      0,
+      Math.round(
+        (end.getTime() - start.getTime()) / millisecondsPerDay,
+      ) + 1,
+    );
+  }
+
+  decide(status: LeaveStatus): void {
+    const currentRequest = this.request();
+
+    if (!currentRequest || currentRequest.status !== 'En attente') {
+      return;
+    }
+
+    const updatedRequest: LeaveRequest = {
+      ...currentRequest,
+      status,
+    };
+
+    const requests = loadActiveLeaveRequests();
+
+    saveLeaveRequests(
+      requests.map((request) =>
+        request.reference === updatedRequest.reference
+          ? updatedRequest
+          : request,
+      ),
+    );
+
+    this.request.set(updatedRequest);
   }
 }
