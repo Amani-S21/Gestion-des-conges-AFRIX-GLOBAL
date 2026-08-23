@@ -121,16 +121,66 @@ def seed_data():
             db.commit()
             db.refresh(employe)
 
+        # Comptes additionnels
+        alice = db.query(User).filter(User.email == "alice.dupont@afrix.com").first()
+        if not alice:
+            alice = User(
+                email="alice.dupont@afrix.com",
+                hashed_password=get_password_hash("password123"),
+                nom="DUPONT",
+                prenom="Alice",
+                matricule="AFX-DEV-002",
+                departement="Ingénierie",
+                role=RoleUtilisateur.EMPLOYE,
+                manager_id=manager.id,
+                is_active=True,
+            )
+            db.add(alice)
+            db.commit()
+            db.refresh(alice)
+
+        marc = db.query(User).filter(User.email == "marc.leroy@afrix.com").first()
+        if not marc:
+            marc = User(
+                email="marc.leroy@afrix.com",
+                hashed_password=get_password_hash("password123"),
+                nom="LEROY",
+                prenom="Marc",
+                matricule="AFX-MGT-002",
+                departement="Ingénierie",
+                role=RoleUtilisateur.MANAGER,
+                is_active=True,
+            )
+            db.add(marc)
+            db.commit()
+            db.refresh(marc)
+
+        sophie = db.query(User).filter(User.email == "sophie.martin@afrix.com").first()
+        if not sophie:
+            sophie = User(
+                email="sophie.martin@afrix.com",
+                hashed_password=get_password_hash("password123"),
+                nom="MARTIN",
+                prenom="Sophie",
+                matricule="AFX-RH-002",
+                departement="Ressources Humaines",
+                role=RoleUtilisateur.RH_ADMIN,
+                is_active=True,
+            )
+            db.add(sophie)
+            db.commit()
+            db.refresh(sophie)
+
         # 6. Initialisation des soldes pour l'année en cours
         annee = datetime.now().year
-        for user in [admin, manager, employe]:
+        for user in [admin, manager, employe, alice, marc, sophie]:
             for tc in types_map.values():
                 SoldeService.get_or_create_solde(db, user.id, tc.id, annee)
 
         print("Comptes utilisateurs de test configurés :")
-        print("   - RH / Admin : admin@afrix.com / admin123")
-        print("   - Manager    : manager@afrix.com / manager123")
-        print("   - Employé    : employe@afrix.com / employe123")
+        print("   - RH / Admin : admin@afrix.com / admin123  (ou sophie.martin@afrix.com / password123)")
+        print("   - Manager    : manager@afrix.com / manager123  (ou marc.leroy@afrix.com / password123)")
+        print("   - Employé    : employe@afrix.com / employe123  (ou alice.dupont@afrix.com / password123)")
         print("Base de données initialisée et prête !")
 
     except Exception as e:

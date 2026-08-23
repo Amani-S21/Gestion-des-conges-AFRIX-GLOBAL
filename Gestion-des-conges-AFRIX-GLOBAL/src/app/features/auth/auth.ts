@@ -1,4 +1,4 @@
-﻿import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
@@ -115,20 +115,20 @@ import { IconComponent } from '../../shared/icon/icon';
             <button
               type="button"
               class="rounded-lg bg-(--color-surface) px-2.5 py-1 text-xs font-medium text-(--color-text) hover:bg-(--color-primary)/10 hover:text-(--color-primary)"
-              (click)="fillCredentials('alice.dupont@afrix.com', 'password123')">
-              Employé (Alice)
+              (click)="fillCredentials('employe@afrix.com', 'employe123')">
+              Employé (Moussa)
             </button>
             <button
               type="button"
               class="rounded-lg bg-(--color-surface) px-2.5 py-1 text-xs font-medium text-(--color-text) hover:bg-(--color-primary)/10 hover:text-(--color-primary)"
-              (click)="fillCredentials('marc.leroy@afrix.com', 'password123')">
-              Manager (Marc)
+              (click)="fillCredentials('manager@afrix.com', 'manager123')">
+              Manager (Jean)
             </button>
             <button
               type="button"
               class="rounded-lg bg-(--color-surface) px-2.5 py-1 text-xs font-medium text-(--color-text) hover:bg-(--color-primary)/10 hover:text-(--color-primary)"
-              (click)="fillCredentials('sophie.martin@afrix.com', 'password123')">
-              RH Admin (Sophie)
+              (click)="fillCredentials('admin@afrix.com', 'admin123')">
+              RH Admin (Aminata)
             </button>
           </div>
         </div>
