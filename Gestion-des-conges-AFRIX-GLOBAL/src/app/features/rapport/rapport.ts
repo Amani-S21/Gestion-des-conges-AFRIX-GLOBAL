@@ -1,4 +1,4 @@
-﻿import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CongeApiService } from '../../core/services/conge-api.service';
 import { UserApiService } from '../../core/services/user-api.service';
@@ -23,7 +23,7 @@ import { IconComponent } from '../../shared/icon/icon';
           </p>
         </div>
         <button class="btn btn-secondary text-sm" type="button" (click)="imprimerRapport()">
-          <app-icon name="calendar" />
+          <app-icon name="printer" />
           Imprimer le rapport
         </button>
       </div>

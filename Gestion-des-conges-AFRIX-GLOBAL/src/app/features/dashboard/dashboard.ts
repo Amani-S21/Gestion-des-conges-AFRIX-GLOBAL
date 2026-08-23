@@ -1,4 +1,4 @@
-﻿import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { CongeApiService } from '../../core/services/conge-api.service';
@@ -18,7 +18,7 @@ import { IconComponent } from '../../shared/icon/icon';
         <div>
           <div class="flex items-center gap-3">
             <h1 id="dashboard-heading" class="text-2xl font-bold text-(--color-text) sm:text-3xl">
-              Bonjour, {{ currentUser()?.prenom }} {{ currentUser()?.nom }} 👋
+              Bonjour, {{ currentUser()?.prenom }} {{ currentUser()?.nom }}
             </h1>
             <span class="rounded-full px-3 py-1 text-xs font-semibold"
               [class.bg-emerald-100]="currentUser()?.role === 'EMPLOYE'"
@@ -38,7 +38,7 @@ import { IconComponent } from '../../shared/icon/icon';
         <!-- Actions rapides -->
         <div class="flex flex-wrap items-center gap-3">
           <a class="btn no-underline" routerLink="/conges">
-            <app-icon name="calendar" />
+            <app-icon name="plus" />
             Nouvelle demande
           </a>
           @if (isManagerOrRH()) {
@@ -55,7 +55,7 @@ import { IconComponent } from '../../shared/icon/icon';
         <div class="mb-8 flex flex-col items-start justify-between gap-4 rounded-2xl border border-amber-200 bg-amber-50 p-5 sm:flex-row sm:items-center">
           <div class="flex items-center gap-3">
             <span class="grid size-10 place-items-center rounded-xl bg-amber-500 text-white">
-              <app-icon name="calendar" />
+              <app-icon name="clock" />
             </span>
             <div>
               <p class="font-semibold text-amber-900">
@@ -77,8 +77,9 @@ import { IconComponent } from '../../shared/icon/icon';
       <section aria-labelledby="soldes-heading" class="mb-10">
         <div class="mb-4 flex items-center justify-between">
           <h2 id="soldes-heading" class="text-lg font-bold text-(--color-text)">Mes soldes disponibles ({{ currentYear }})</h2>
-          <a routerLink="/soldes" class="text-sm font-semibold text-(--color-primary) no-underline hover:underline">
-            Voir le détail des soldes →
+          <a routerLink="/soldes" class="inline-flex items-center gap-1 text-sm font-semibold text-(--color-primary) no-underline hover:underline">
+            Voir le détail des soldes
+            <app-icon name="chevron" />
           </a>
         </div>
 
@@ -124,8 +125,9 @@ import { IconComponent } from '../../shared/icon/icon';
       <section aria-labelledby="conges-heading">
         <div class="mb-4 flex items-center justify-between">
           <h2 id="conges-heading" class="text-lg font-bold text-(--color-text)">Mes demandes récentes</h2>
-          <a routerLink="/conges/historique" class="text-sm font-semibold text-(--color-primary) no-underline hover:underline">
-            Voir tout l'historique ({{ mesDemandes().length }}) →
+          <a routerLink="/conges/historique" class="inline-flex items-center gap-1 text-sm font-semibold text-(--color-primary) no-underline hover:underline">
+            Voir tout l'historique ({{ mesDemandes().length }})
+            <app-icon name="chevron" />
           </a>
         </div>
 

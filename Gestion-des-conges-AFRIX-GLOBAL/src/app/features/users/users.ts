@@ -1,4 +1,4 @@
-﻿import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { UserApiService } from '../../core/services/user-api.service';
@@ -24,7 +24,7 @@ import { ModalComponent } from '../../shared/modal/modal';
         </div>
         <div class="flex flex-wrap items-center gap-3">
           <button class="btn" type="button" (click)="openCreateModal()">
-            <app-icon name="user" />
+            <app-icon name="plus" />
             Nouvel employé
           </button>
         </div>
