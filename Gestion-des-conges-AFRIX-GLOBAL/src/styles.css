@@ -1,5 +1,87 @@
 @import './styles/tokens.css';
 @import './app/shared/button/button.css';
-/* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+/* Animations de transition de page et d'éléments */
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+main {
+  animation: pageFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.home-reveal {
+  animation: homeReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.home-reveal-delay-1 {
+  animation-delay: 120ms;
+}
+
+.home-reveal-delay-2 {
+  animation-delay: 240ms;
+}
+
+@keyframes homeReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Amélioration de l'accessibilité clavier */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+/* Style d'impression professionnel pour les rapports */
+@media print {
+
+  header,
+  footer,
+  nav,
+  button,
+  a.btn {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+    max-width: 100% !important;
+    animation: none !important;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+    break-inside: avoid;
+  }
+}

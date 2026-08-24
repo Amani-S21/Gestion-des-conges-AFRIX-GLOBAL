@@ -13,10 +13,10 @@ import { IconComponent } from '../../shared/icon/icon';
       
       <!-- En-tête de la page de connexion -->
       <div class="text-center">
-        <div class="mx-auto mb-4 grid size-14 place-items-center rounded-2xl bg-(--color-primary)/10 text-(--color-primary)">
-          <app-icon name="user" />
+        <div class="mx-auto mb-4 flex justify-center">
+          <img src="assets/afrix.png" alt="AfriPause Logo" class="h-12 w-auto object-contain" />
         </div>
-        <p class="text-xs font-bold uppercase tracking-[0.2em] text-(--color-primary)">AFRIX GLOBAL</p>
+        <p class="text-xs font-bold uppercase tracking-[0.2em] text-(--color-primary)">AfriPause</p>
         <h1 class="mt-2 text-2xl font-bold text-(--color-text) sm:text-3xl">Connexion à votre espace</h1>
         <p class="mt-2 text-sm text-(--color-text-secondary)">
           Entrez vos identifiants professionnels pour gérer vos congés et absences.
@@ -138,7 +138,7 @@ import { IconComponent } from '../../shared/icon/icon';
       <!-- Lien de retour -->
       <div class="mt-6 text-center">
         <a routerLink="/" class="inline-flex items-center gap-1 text-sm text-(--color-text-secondary) hover:text-(--color-primary)">
-          <app-icon name="chevron" />
+          <app-icon name="arrow-left" />
           Retour à la page d'accueil
         </a>
       </div>

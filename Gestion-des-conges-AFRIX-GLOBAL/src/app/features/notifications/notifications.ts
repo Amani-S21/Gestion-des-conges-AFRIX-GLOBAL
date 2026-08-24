@@ -28,14 +28,23 @@ import { IconComponent } from '../../shared/icon/icon';
       </div>
 
       <!-- État de chargement -->
-      @if (isLoading()) {
-        <div class="card p-12 text-center text-(--color-text-secondary)">
-          Chargement de vos notifications...
+            @if (isLoading()) {
+        <div class="grid gap-3 animate-pulse">
+          @for (i of [1, 2, 3, 4]; track i) {
+            <div class="card p-5 flex items-center justify-between gap-4">
+              <div class="space-y-2 flex-1">
+                <div class="h-4 w-40 rounded bg-slate-200 dark:bg-slate-700"></div>
+                <div class="h-3 w-3/4 rounded bg-slate-200 dark:bg-slate-700"></div>
+                <div class="h-2.5 w-24 rounded bg-slate-200 dark:bg-slate-700"></div>
+              </div>
+              <div class="h-8 w-20 rounded-lg bg-slate-200 dark:bg-slate-700"></div>
+            </div>
+          }
         </div>
       } @else if (notifications().length === 0) {
         <section class="card p-12 text-center">
           <div class="mx-auto grid size-12 place-items-center rounded-2xl bg-gray-100 text-gray-400">
-            <app-icon name="calendar" />
+            <app-icon name="bell" />
           </div>
           <h2 class="mt-4 text-lg font-bold text-(--color-text)">Aucune notification</h2>
           <p class="mt-1 text-sm text-(--color-text-secondary)">
@@ -50,7 +59,7 @@ import { IconComponent } from '../../shared/icon/icon';
               class="card flex flex-col justify-between gap-4 p-5 transition-colors sm:flex-row sm:items-center"
               [class.border-l-4]="!notif.lue"
               [class.border-(--color-primary)]="!notif.lue"
-              [class.bg-blue-50/20]="!notif.lue">
+              [class.bg-(--color-primary)/5]="!notif.lue">
               
               <div>
                 <div class="flex items-center gap-3">
@@ -92,7 +101,7 @@ import { IconComponent } from '../../shared/icon/icon';
 
       <div class="mt-8 border-t border-(--color-text)/10 pt-6">
         <a routerLink="/dashboard" class="inline-flex items-center gap-2 text-sm text-(--color-primary) no-underline">
-          <app-icon name="chevron" />
+          <app-icon name="arrow-left" />
           Retour au tableau de bord
         </a>
       </div>

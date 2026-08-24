@@ -19,7 +19,7 @@ import { IconComponent } from '../../shared/icon/icon';
           <p class="text-sm font-semibold uppercase tracking-[0.18em] text-(--color-primary)">Pilotage et Synthèse RH</p>
           <h1 id="rapport-title" class="mt-2 text-3xl font-bold text-(--color-text)">Rapports et indicateurs d'activité</h1>
           <p class="mt-2 text-(--color-text-secondary)">
-            Vision consolidée des absences, tendances et volumétries globales de l'entreprise AFRIX GLOBAL.
+            Vision consolidée des absences, tendances et volumétries globales de l'organisation AfriPause.
           </p>
         </div>
         <button class="btn btn-secondary text-sm" type="button" (click)="imprimerRapport()">
@@ -28,57 +28,73 @@ import { IconComponent } from '../../shared/icon/icon';
         </button>
       </div>
 
-      <!-- Cartes d'indicateurs clés -->
-      <div class="mb-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        
-        <div class="card border-l-4 border-blue-500 p-5">
-          <p class="text-xs font-bold uppercase text-(--color-text-secondary)">Effectif total</p>
-          <p class="mt-2 text-3xl font-black text-(--color-text)">{{ users().length }}</p>
-          <p class="mt-1 text-xs text-(--color-text-secondary)">Collaborateurs actifs enregistrés</p>
-        </div>
-
-        <div class="card border-l-4 border-amber-500 p-5">
-          <p class="text-xs font-bold uppercase text-(--color-text-secondary)">En attente</p>
-          <p class="mt-2 text-3xl font-black text-amber-600">{{ totalEnAttente() }}</p>
-          <p class="mt-1 text-xs text-(--color-text-secondary)">Demandes à valider par les managers</p>
-        </div>
-
-        <div class="card border-l-4 border-emerald-500 p-5">
-          <p class="text-xs font-bold uppercase text-(--color-text-secondary)">Jours pris (Année)</p>
-          <p class="mt-2 text-3xl font-black text-emerald-600">{{ totalJoursPris() }}</p>
-          <p class="mt-1 text-xs text-(--color-text-secondary)">Jours ouvrés consommés</p>
-        </div>
-
-        <div class="card border-l-4 border-purple-500 p-5">
-          <p class="text-xs font-bold uppercase text-(--color-text-secondary)">Taux d'acceptation</p>
-          <p class="mt-2 text-3xl font-black text-purple-600">{{ tauxAcceptation() }}%</p>
-          <p class="mt-1 text-xs text-(--color-text-secondary)">Sur l'ensemble des décisions</p>
-        </div>
-
-      </div>
-
-      <!-- Répartition par département -->
-      <section class="card shadow-sm" aria-labelledby="departements-heading">
-        <h2 id="departements-heading" class="text-lg font-bold text-(--color-text)">
-          Répartition des effectifs par département
-        </h2>
-        <div class="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-          @for (dep of statsParDepartement(); track dep.nom) {
-            <div class="rounded-xl border border-(--color-text)/10 p-4">
-              <p class="font-bold text-(--color-text)">{{ dep.nom }}</p>
-              <div class="mt-2 flex items-baseline justify-between text-sm">
-                <span class="text-(--color-text-secondary)">{{ dep.effectif }} collaborateur(s)</span>
-                <span class="font-bold text-(--color-primary)">{{ dep.pourcentage }}%</span>
-              </div>
+      <!-- État de chargement (Skeleton) -->
+      @if (isLoading()) {
+        <div class="mb-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 animate-pulse">
+          @for (i of [1, 2, 3, 4]; track i) {
+            <div class="card p-5 space-y-3">
+              <div class="h-4 w-28 rounded bg-slate-200 dark:bg-slate-700"></div>
+              <div class="h-8 w-16 rounded bg-slate-200 dark:bg-slate-700"></div>
+              <div class="h-3 w-40 rounded bg-slate-200 dark:bg-slate-700"></div>
             </div>
           }
         </div>
-      </section>
+      } @else {
+        <!-- Cartes d'indicateurs clés -->
+        <div class="mb-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          
+          <div class="card border-l-4 border-(--color-primary) p-5">
+            <p class="text-xs font-bold uppercase text-(--color-text-secondary)">Effectif total</p>
+            <p class="mt-2 text-3xl font-black text-(--color-primary)">{{ users().length }}</p>
+            <p class="mt-1 text-xs text-(--color-text-secondary)">Collaborateurs enregistrés</p>
+          </div>
+
+          <div class="card border-l-4 border-amber-500 p-5">
+            <p class="text-xs font-bold uppercase text-(--color-text-secondary)">En attente</p>
+            <p class="mt-2 text-3xl font-black text-amber-600">{{ totalEnAttente() }}</p>
+            <p class="mt-1 text-xs text-(--color-text-secondary)">Demandes à valider par les managers</p>
+          </div>
+
+          <div class="card border-l-4 border-emerald-500 p-5">
+            <p class="text-xs font-bold uppercase text-(--color-text-secondary)">Jours validés</p>
+            <p class="mt-2 text-3xl font-black text-emerald-600">{{ totalJoursPris() }}</p>
+            <p class="mt-1 text-xs text-(--color-text-secondary)">Jours ouvrés accordés</p>
+          </div>
+
+          <div class="card border-l-4 border-purple-500 p-5">
+            <p class="text-xs font-bold uppercase text-(--color-text-secondary)">Taux d'acceptation</p>
+            <p class="mt-2 text-3xl font-black text-purple-600">{{ tauxAcceptation() }}%</p>
+            <p class="mt-1 text-xs text-(--color-text-secondary)">Sur l'ensemble des décisions</p>
+          </div>
+
+        </div>
+
+        <!-- Répartition par département avec barres visuelles -->
+        <section class="card shadow-sm" aria-labelledby="departements-heading">
+          <h2 id="departements-heading" class="text-lg font-bold text-(--color-text)">
+            Répartition des effectifs par département
+          </h2>
+          <div class="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+            @for (dep of statsParDepartement(); track dep.nom) {
+              <div class="rounded-xl border border-slate-200/80 dark:border-slate-800 p-4 space-y-2">
+                <div class="flex items-center justify-between">
+                  <p class="font-bold text-sm text-(--color-text)">{{ dep.nom }}</p>
+                  <span class="font-bold text-xs text-(--color-primary)">{{ dep.pourcentage }}%</span>
+                </div>
+                <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                  <div class="h-full rounded-full bg-(--color-primary)" [style.width.%]="dep.pourcentage"></div>
+                </div>
+                <p class="text-xs text-(--color-text-secondary)">{{ dep.effectif }} collaborateur(s)</p>
+              </div>
+            }
+          </div>
+        </section>
+      }
 
       <!-- Navigation -->
       <div class="mt-8 border-t border-(--color-text)/10 pt-6">
-        <a routerLink="/dashboard" class="inline-flex items-center gap-2 text-sm text-(--color-primary) no-underline">
-          <app-icon name="chevron" />
+        <a routerLink="/dashboard" class="inline-flex items-center gap-2 text-sm text-(--color-primary) no-underline hover:underline">
+          <app-icon name="arrow-left" />
           Retour au tableau de bord
         </a>
       </div>
@@ -94,6 +110,7 @@ export class Rapport implements OnInit {
   private readonly congeApi = inject(CongeApiService);
   private readonly userApi = inject(UserApiService);
 
+  readonly isLoading = signal(true);
   readonly users = signal<CurrentUser[]>([]);
   readonly conges = signal<DemandeConge[]>([]);
 
@@ -131,10 +148,20 @@ export class Rapport implements OnInit {
 
   ngOnInit(): void {
     this.userApi.getUsers().subscribe({
-      next: (data) => this.users.set(data),
-    });
-    this.congeApi.getMesConges().subscribe({
-      next: (data) => this.conges.set(data),
+      next: (users) => {
+        this.users.set(users);
+        this.congeApi.getCongesAValider().subscribe({
+          next: (conges) => {
+            this.conges.set(conges);
+            this.isLoading.set(false);
+          },
+          error: () => {
+            this.conges.set([]);
+            this.isLoading.set(false);
+          }
+        });
+      },
+      error: () => this.isLoading.set(false),
     });
   }
 

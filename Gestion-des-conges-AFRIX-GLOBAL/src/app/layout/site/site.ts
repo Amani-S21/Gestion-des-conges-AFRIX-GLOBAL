@@ -10,7 +10,8 @@ import { RouterOutlet } from "@angular/router";
   <div class="flex min-h-screen flex-col bg-(--color-bg)">
     <app-navbar />
 
-    <main class="flex-1 pt-20">
+    <!-- Espace ajusté exactement à la hauteur du header (14 = 56px) sans excès -->
+    <main class="flex-1 pt-14">
       <router-outlet />
     </main>
 

@@ -21,15 +21,29 @@ import { IconComponent } from '../../shared/icon/icon';
           </p>
         </div>
         <a routerLink="/conges" class="btn no-underline">
-          <app-icon name="calendar" />
+          <app-icon name="plus" />
           Faire une demande
         </a>
       </div>
 
       <!-- État de chargement -->
-      @if (isLoading()) {
-        <div class="card p-12 text-center text-(--color-text-secondary)">
-          Chargement de vos soldes de congés...
+            @if (isLoading()) {
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3 animate-pulse">
+          @for (i of [1, 2, 3]; track i) {
+            <div class="card p-6 space-y-4">
+              <div class="flex justify-between">
+                <div class="h-5 w-36 rounded bg-slate-200 dark:bg-slate-700"></div>
+                <div class="h-5 w-10 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+              </div>
+              <div class="h-12 w-20 mx-auto rounded bg-slate-200 dark:bg-slate-700"></div>
+              <div class="h-3 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+              <div class="grid grid-cols-3 gap-2 pt-2">
+                <div class="h-10 rounded bg-slate-200 dark:bg-slate-700"></div>
+                <div class="h-10 rounded bg-slate-200 dark:bg-slate-700"></div>
+                <div class="h-10 rounded bg-slate-200 dark:bg-slate-700"></div>
+              </div>
+            </div>
+          }
         </div>
       } @else if (soldes().length === 0) {
         <section class="card p-12 text-center">
@@ -105,7 +119,7 @@ import { IconComponent } from '../../shared/icon/icon';
       <!-- Liens de navigation -->
       <div class="mt-8 border-t border-(--color-text)/10 pt-6">
         <a routerLink="/dashboard" class="inline-flex items-center gap-2 text-sm text-(--color-primary) no-underline">
-          <app-icon name="chevron" />
+          <app-icon name="arrow-left" />
           Retour au tableau de bord
         </a>
       </div>
