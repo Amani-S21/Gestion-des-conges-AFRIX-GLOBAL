@@ -50,7 +50,7 @@ import { ModalComponent } from '../../shared/modal/modal';
             class="field-input cursor-pointer"
             formControlName="type_conge_id"
             [class.border-red-500]="isFieldInvalid('type_conge_id')">
-            <option [value]="null" disabled selected>-- Choisissez une catégorie de congé --</option>
+            <option value="" disabled>-- Choisissez une catégorie de congé --</option>
             @for (type of typesConge(); track type.id) {
               <option [value]="type.id">{{ type.libelle }} (Quota annuel : {{ type.quota_annuel_defaut }}j)</option>
             }
@@ -291,9 +291,6 @@ export default class Conge implements OnInit {
     this.typeCongeApi.getTypesConge().subscribe({
       next: (types) => {
         this.typesConge.set(types);
-        if (types.length > 0) {
-          this.demandeForm.patchValue({ type_conge_id: types[0].id });
-        }
       },
     });
 

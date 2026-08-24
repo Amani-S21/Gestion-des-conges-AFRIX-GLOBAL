@@ -10,30 +10,33 @@ import { IconComponent } from '../../shared/icon/icon';
   <div class="overflow-hidden">
     
     <!-- 1. HERO SECTION -->
-    <section class="relative mx-auto grid w-full max-w-7xl gap-12 px-4 pb-16 pt-8 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:px-8 lg:pb-24 lg:pt-12" aria-labelledby="hero-title">
+    <section class="home-reveal relative mx-auto grid w-full max-w-7xl gap-12 px-4 pb-16 pt-8 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:px-8 lg:pb-24 lg:pt-12" aria-labelledby="hero-title">
       
       <!-- Colonne gauche : Titre & CTA -->
       <div class="relative z-10">
         
         <!-- Badge de marque -->
-        <div class="inline-flex items-center gap-2 rounded-full border border-(--color-primary)/20 bg-(--color-primary)/10 px-3.5 py-1 text-xs font-bold text-(--color-primary) mb-6">
+        <div class="mb-6 inline-flex max-w-full flex-wrap items-center gap-2 rounded-full border border-(--color-primary)/20 bg-(--color-primary)/10 px-3.5 py-1 text-xs font-bold leading-5 text-(--color-primary)">
           <span class="size-2 rounded-full bg-(--color-primary) animate-pulse"></span>
-          Plateforme Intelligente de Gestion RH
+          Gestion RH des congés
         </div>
 
         <h1 id="hero-title" class="max-w-3xl text-4xl font-extrabold leading-tight tracking-tight text-(--color-text) sm:text-5xl lg:text-6xl">
-          Les congés de votre équipe, enfin <span class="text-(--color-primary)">simples et fluides.</span>
+          Une gestion des congés <span class="text-(--color-primary)">simple, fiable et visible.</span>
         </h1>
         
         <p class="mt-6 max-w-2xl text-lg leading-relaxed text-(--color-text-secondary)">
-          AfriPause centralise les demandes d'absence, automatise le calcul des jours ouvrés et accélère les validations hiérarchiques pour toute l'organisation.
+          AfriPause centralise les demandes d'absence, automatise le calcul des jours ouvrés et donne à chaque collaborateur, manager et équipe RH une vision claire des disponibilités.
         </p>
 
-        <!-- CTA Principal Unique -->
-        <div class="mt-8 flex flex-wrap items-center gap-4">
+        <div class="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
           <a class="btn flex items-center gap-2 px-8 py-3.5 text-base font-bold shadow-lg shadow-(--color-primary)/25 hover:shadow-xl transition-all no-underline" routerLink="/auth">
-            Accéder à mon espace
+            Se connecter
             <app-icon name="arrow-right" />
+          </a>
+          <a class="inline-flex items-center justify-center gap-2 rounded-full border border-(--color-primary)/30 px-7 py-3.5 text-base font-bold text-(--color-primary) no-underline transition-colors hover:bg-(--color-primary)/10" href="#fonctionnement">
+            Découvrir la plateforme
+            <app-icon name="chevron" />
           </a>
         </div>
 
@@ -56,7 +59,7 @@ import { IconComponent } from '../../shared/icon/icon';
       </div>
 
       <!-- Colonne droite : Aperçu d'Interface SaaS AfriPause -->
-      <div class="relative rounded-3xl border border-slate-200/80 bg-white/90 p-6 shadow-2xl backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/90 sm:p-7">
+      <div class="home-reveal home-reveal-delay-1 relative rounded-3xl border border-slate-200/80 bg-white/90 p-6 shadow-2xl backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/90 sm:p-7">
         
         <!-- Décoration lumineuse d'arrière-plan -->
         <div class="absolute -right-6 -top-6 size-32 rounded-full bg-(--color-primary)/15 blur-3xl"></div>
@@ -139,11 +142,28 @@ import { IconComponent } from '../../shared/icon/icon';
 
     </section>
 
+    <section class="border-y border-(--color-primary)/10 bg-(--color-primary)/5 px-4 py-7 sm:px-6 lg:px-8" aria-label="Engagements de la plateforme">
+      <div class="mx-auto grid max-w-7xl gap-5 text-center sm:grid-cols-3 sm:text-left">
+        <div class="home-reveal">
+          <p class="text-2xl font-black text-(--color-primary)">3 profils</p>
+          <p class="mt-1 text-sm text-(--color-text-secondary)">Collaborateurs, managers et RH réunis dans un même espace.</p>
+        </div>
+        <div class="home-reveal home-reveal-delay-1">
+          <p class="text-2xl font-black text-(--color-primary)">1 circuit</p>
+          <p class="mt-1 text-sm text-(--color-text-secondary)">Une demande suivie de bout en bout, sans relance inutile.</p>
+        </div>
+        <div class="home-reveal home-reveal-delay-2">
+          <p class="text-2xl font-black text-(--color-primary)">100 % visible</p>
+          <p class="mt-1 text-sm text-(--color-text-secondary)">Soldes, historiques et décisions accessibles au bon moment.</p>
+        </div>
+      </div>
+    </section>
+
     <!-- 2. SECTION LE CONSTAT (Douleurs résolues) -->
-    <section class="bg-slate-100/70 dark:bg-slate-900/50 px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="probleme-title">
+    <section class="border-y border-(--color-primary)/10 bg-(--color-primary)/5 px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="probleme-title">
       <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
         <div>
-          <p class="text-xs font-bold uppercase tracking-[0.2em] text-red-500">Le constat</p>
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-(--color-primary)">Le constat</p>
           <h2 id="probleme-title" class="mt-3 text-3xl font-extrabold text-(--color-text) sm:text-4xl">
             La gestion manuelle des absences freine votre productivité.
           </h2>
@@ -153,20 +173,20 @@ import { IconComponent } from '../../shared/icon/icon';
         </div>
 
         <div class="grid gap-4 sm:grid-cols-3">
-          <article class="rounded-2xl border border-slate-200/60 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <p class="text-2xl font-black text-red-500">01</p>
+          <article class="rounded-2xl border border-(--color-primary)/15 bg-(--color-surface) p-5 shadow-sm">
+            <p class="text-2xl font-black text-(--color-primary)">01</p>
             <h3 class="mt-4 font-bold text-(--color-text)">Demandes dispersées</h3>
             <p class="mt-2 text-xs leading-relaxed text-(--color-text-secondary)">Emails, messages et fichiers papier rendent le suivi impossible.</p>
           </article>
 
-          <article class="rounded-2xl border border-slate-200/60 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <p class="text-2xl font-black text-amber-500">02</p>
+          <article class="rounded-2xl border border-(--color-warning)/25 bg-(--color-surface) p-5 shadow-sm">
+            <p class="text-2xl font-black text-(--color-warning)">02</p>
             <h3 class="mt-4 font-bold text-(--color-text)">Soldes incertains</h3>
             <p class="mt-2 text-xs leading-relaxed text-(--color-text-secondary)">Manque de visibilité sur les jours acquis, consommés et restants.</p>
           </article>
 
-          <article class="rounded-2xl border border-slate-200/60 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-            <p class="text-2xl font-black text-(--color-primary)">03</p>
+          <article class="rounded-2xl border border-(--color-success)/25 bg-(--color-surface) p-5 shadow-sm">
+            <p class="text-2xl font-black text-(--color-success)">03</p>
             <h3 class="mt-4 font-bold text-(--color-text)">Validations lentes</h3>
             <p class="mt-2 text-xs leading-relaxed text-(--color-text-secondary)">Les responsables hésitent faute d'avoir l'historique complet.</p>
           </article>
@@ -174,8 +194,32 @@ import { IconComponent } from '../../shared/icon/icon';
       </div>
     </section>
 
+    <section class="bg-(--color-bg) px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="faq-title">
+      <div class="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-(--color-primary)">Questions fréquentes</p>
+          <h2 id="faq-title" class="mt-3 text-3xl font-extrabold text-(--color-text) sm:text-4xl">Tout est clair avant de commencer.</h2>
+          <p class="mt-4 text-sm leading-relaxed text-(--color-text-secondary)">Retrouve les réponses essentielles sur le fonctionnement d'AfriPause et les profils concernés.</p>
+        </div>
+        <div class="grid gap-3">
+          <details class="group rounded-2xl border border-(--color-primary)/15 bg-(--color-surface) p-5">
+            <summary class="cursor-pointer list-none pr-6 font-bold text-(--color-text) marker:hidden">À qui s'adresse AfriPause ?</summary>
+            <p class="mt-3 text-sm leading-relaxed text-(--color-text-secondary)">La plateforme accompagne les collaborateurs, les managers et les équipes RH dans un même circuit de gestion.</p>
+          </details>
+          <details class="group rounded-2xl border border-(--color-primary)/15 bg-(--color-surface) p-5">
+            <summary class="cursor-pointer list-none pr-6 font-bold text-(--color-text) marker:hidden">Comment une demande est-elle validée ?</summary>
+            <p class="mt-3 text-sm leading-relaxed text-(--color-text-secondary)">Le collaborateur soumet ses dates, le manager reçoit la demande, puis la décision est historisée pour les RH.</p>
+          </details>
+          <details class="group rounded-2xl border border-(--color-primary)/15 bg-(--color-surface) p-5">
+            <summary class="cursor-pointer list-none pr-6 font-bold text-(--color-text) marker:hidden">Les jours ouvrés sont-ils calculés automatiquement ?</summary>
+            <p class="mt-3 text-sm leading-relaxed text-(--color-text-secondary)">Oui. Les périodes, les demi-journées et les droits disponibles sont pris en compte avant l'envoi.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
     <!-- 3. SECTION FONCTIONNALITÉS ESSENTIELLES -->
-    <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8" aria-labelledby="features-title">
+    <section id="fonctionnalites" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8" aria-labelledby="features-title">
       <div class="text-center max-w-2xl mx-auto">
         <p class="text-xs font-bold uppercase tracking-[0.2em] text-(--color-primary)">Fonctionnalités Clés</p>
         <h2 id="features-title" class="mt-3 text-3xl font-extrabold text-(--color-text) sm:text-4xl">
@@ -228,45 +272,88 @@ import { IconComponent } from '../../shared/icon/icon';
       </div>
     </section>
 
-    <!-- 4. SECTION PAR RÔLE -->
-    <section class="bg-slate-100/70 dark:bg-slate-900/50 px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="profils-title">
+    <section id="fonctionnement" class="bg-(--color-header) px-4 py-16 text-white sm:px-6 lg:px-8" aria-labelledby="steps-title">
       <div class="mx-auto max-w-7xl">
-        <div class="text-center max-w-xl mx-auto">
-          <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-600">Expérience Sur-Mesure</p>
-          <h2 id="profils-title" class="mt-3 text-3xl font-extrabold text-(--color-text)">
-            Une interface adaptée à chaque profil
-          </h2>
+        <div class="max-w-2xl">
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-(--color-primary-light)">En trois étapes</p>
+          <h2 id="steps-title" class="mt-3 text-3xl font-extrabold sm:text-4xl">Une demande claire, du dépôt à la décision.</h2>
         </div>
+        <ol class="mt-10 grid gap-8 md:grid-cols-3">
+          <li class="border-t border-white/20 pt-5">
+            <span class="text-3xl font-black text-(--color-primary-light)">01</span>
+            <h3 class="mt-3 text-lg font-bold">Le collaborateur dépose</h3>
+            <p class="mt-2 text-sm leading-relaxed text-white/75">Les dates, la durée ouvrée et le solde disponible sont visibles avant l'envoi.</p>
+          </li>
+          <li class="border-t border-white/20 pt-5">
+            <span class="text-3xl font-black text-(--color-primary-light)">02</span>
+            <h3 class="mt-3 text-lg font-bold">Le manager décide</h3>
+            <p class="mt-2 text-sm leading-relaxed text-white/75">Les demandes prioritaires arrivent dans une file de validation simple à traiter.</p>
+          </li>
+          <li class="border-t border-white/20 pt-5">
+            <span class="text-3xl font-black text-(--color-primary-light)">03</span>
+            <h3 class="mt-3 text-lg font-bold">Les RH pilotent</h3>
+            <p class="mt-2 text-sm leading-relaxed text-white/75">Les soldes, équipes et rapports restent centralisés pour des décisions fiables.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
 
-        <div class="mt-10 grid gap-6 md:grid-cols-3">
-          
-          <div class="card p-6 border-l-4 border-(--color-primary)">
-            <p class="text-xs font-bold uppercase text-(--color-primary)">Collaborateur</p>
-            <h3 class="mt-2 text-lg font-bold text-(--color-text)">Autonomie & Visibilité</h3>
-            <p class="mt-2 text-xs text-(--color-text-secondary) leading-relaxed">
-              Déposez vos demandes en 30 secondes, suivez l'avancement de vos dossiers et connaissez toujours vos droits restants.
-            </p>
-          </div>
-
-          <div class="card p-6 border-l-4 border-amber-500">
-            <p class="text-xs font-bold uppercase text-amber-600">Manager d'Équipe</p>
-            <h3 class="mt-2 text-lg font-bold text-(--color-text)">Décision & Sérénité</h3>
-            <p class="mt-2 text-xs text-(--color-text-secondary) leading-relaxed">
-              Recevez des notifications immédiates, examinez les motifs et validez les absences sans perturber le planning de votre équipe.
-            </p>
-          </div>
-
-          <div class="card p-6 border-l-4 border-emerald-500">
-            <p class="text-xs font-bold uppercase text-emerald-600">Ressources Humaines</p>
-            <h3 class="mt-2 text-lg font-bold text-(--color-text)">Contrôle & Conformité</h3>
-            <p class="mt-2 text-xs text-(--color-text-secondary) leading-relaxed">
-              Gérez les comptes employés, ajustez les quotas annuels et générez des synthèses d'activité fiables pour la direction.
-            </p>
-          </div>
-
+    <section class="border-y border-(--color-primary)/10 bg-(--color-primary)/5 px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="trust-title">
+      <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-(--color-primary)">Confiance & maîtrise</p>
+          <h2 id="trust-title" class="mt-3 text-3xl font-extrabold text-(--color-text) sm:text-4xl">Les bonnes informations, au bon niveau d'accès.</h2>
+          <p class="mt-4 max-w-xl text-sm leading-relaxed text-(--color-text-secondary)">
+            Chaque profil dispose d'une vue adaptée à ses responsabilités. Les demandes sont historisées et les droits restent lisibles à chaque étape.
+          </p>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-3">
+          <article class="rounded-2xl border border-(--color-primary)/15 bg-(--color-surface) p-5">
+            <span class="grid size-10 place-items-center rounded-xl bg-(--color-primary)/10 text-(--color-primary)" aria-hidden="true"><app-icon name="shield" /></span>
+            <h3 class="mt-4 text-sm font-bold text-(--color-text)">Accès par rôle</h3>
+            <p class="mt-2 text-xs leading-relaxed text-(--color-text-secondary)">Collaborateurs, managers et RH voient uniquement les actions qui les concernent.</p>
+          </article>
+          <article class="rounded-2xl border border-(--color-primary)/15 bg-(--color-surface) p-5">
+            <span class="grid size-10 place-items-center rounded-xl bg-emerald-500/10 text-emerald-600" aria-hidden="true"><app-icon name="check" /></span>
+            <h3 class="mt-4 text-sm font-bold text-(--color-text)">Décisions tracées</h3>
+            <p class="mt-2 text-xs leading-relaxed text-(--color-text-secondary)">Chaque validation ou refus reste visible avec son historique et son contexte.</p>
+          </article>
+          <article class="rounded-2xl border border-(--color-primary)/15 bg-(--color-surface) p-5">
+            <span class="grid size-10 place-items-center rounded-xl bg-amber-500/10 text-amber-600" aria-hidden="true"><app-icon name="file-text" /></span>
+            <h3 class="mt-4 text-sm font-bold text-(--color-text)">Rapports fiables</h3>
+            <p class="mt-2 text-xs leading-relaxed text-(--color-text-secondary)">Les équipes RH disposent d'une base claire pour suivre les soldes et l'activité.</p>
+          </article>
         </div>
       </div>
     </section>
+
+    <!-- 4. SECTION PAR RÔLE -->
+    <section class="bg-(--color-header) px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="profils-title"> 
+  <div class="mx-auto max-w-7xl"> 
+    <div class="text-center max-w-xl mx-auto"> 
+      <p class="text-xs font-bold uppercase tracking-[0.2em] text-(--color-primary-light)">Expérience Sur-Mesure</p> 
+      <h2 id="profils-title" class="mt-3 text-3xl font-extrabold text-white"> Une interface adaptée à chaque profil </h2> 
+    </div> 
+    <div class="mt-10 grid gap-6 md:grid-cols-3"> 
+      <div class="card p-6 border-l-4 border-(--color-primary)"> 
+        <p class="text-xs font-bold uppercase text-(--color-primary)">Collaborateur</p> 
+        <h3 class="mt-2 text-lg font-bold text-white">Autonomie & Visibilité</h3> 
+        <p class="mt-2 text-xs text-white/75 leading-relaxed"> Déposez vos demandes en 30 secondes, suivez l'avancement de vos dossiers et connaissez toujours vos droits restants. </p> 
+      </div> 
+      <div class="card p-6 border-l-4 border-(--color-warning)"> 
+        <p class="text-xs font-bold uppercase text-(--color-warning)">Manager d'Équipe</p> 
+        <h3 class="mt-2 text-lg font-bold text-white">Décision & Sérénité</h3> 
+        <p class="mt-2 text-xs text-white/75 leading-relaxed"> Recevez des notifications immédiates, examinez les motifs et validez les absences sans perturber le planning de votre équipe. </p> 
+      </div> 
+      <div class="card p-6 border-l-4 border-(--color-success)"> 
+        <p class="text-xs font-bold uppercase text-(--color-success)">Ressources Humaines</p> 
+        <h3 class="mt-2 text-lg font-bold text-white">Contrôle & Conformité</h3> 
+        <p class="mt-2 text-xs text-white/75 leading-relaxed"> Gérez les comptes employés, ajustez les quotas annuels et générez des synthèses d'activité fiables pour la direction. </p> 
+      </div> 
+    </div> 
+  </div> 
+</section>
+
 
     <!-- 5. SECTION CTA FINAL -->
     <section class="px-4 py-16 sm:px-6 lg:px-8" aria-labelledby="cta-title">
@@ -277,10 +364,15 @@ import { IconComponent } from '../../shared/icon/icon';
             Rejoignez votre espace sécurisé AfriPause dès aujourd'hui et commencez à planifier vos absences en toute simplicité.
           </p>
         </div>
-        <a class="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-bold text-(--color-header) shadow-md no-underline transition-all hover:bg-slate-100 hover:scale-105" routerLink="/auth">
-          Se connecter
-          <app-icon name="arrow-right" />
-        </a>
+        <div class="flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:flex-row">
+          <a class="inline-flex items-center justify-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-bold text-(--color-header) shadow-md no-underline transition-all hover:bg-slate-100 hover:scale-105" routerLink="/auth">
+            Se connecter
+            <app-icon name="arrow-right" />
+          </a>
+          <a class="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 px-8 py-3.5 text-sm font-bold text-white no-underline transition-colors hover:bg-white/10" href="https://www.afrix.global/fr" fragment="contact">
+            Nous contacter
+          </a>
+        </div>
       </div>
     </section>
 
@@ -288,4 +380,4 @@ import { IconComponent } from '../../shared/icon/icon';
   `,
   styles: ``,
 })
-export class Home {}
+export class Home { }

@@ -34,20 +34,20 @@ import { IconComponent } from '../shared/icon/icon';
             <a class="nav-text-link text-sm font-medium text-white/80 no-underline transition-colors hover:text-white" routerLink="/" (click)="closeMenus()">
               Accueil
             </a>
-          </li> |
+          </li>
 
           @if (authService.isAuthenticated()) {
             <li>
               <a class="nav-text-link text-sm font-medium text-white/80 no-underline transition-colors hover:text-white" routerLink="/dashboard" (click)="closeMenus()">
                 Tableau de bord
               </a>
-            </li> |
+            </li>
 
             <li>
               <a class="nav-text-link text-sm font-medium text-white/80 no-underline transition-colors hover:text-white" routerLink="/conges/historique" (click)="closeMenus()">
                 Mes congés
               </a>
-            </li> |
+            </li>
 
             <!-- Accès Validation pour Managers et RH -->
             @if (isManagerOrRH()) {
@@ -55,7 +55,7 @@ import { IconComponent } from '../shared/icon/icon';
                 <a class="nav-text-link text-sm font-medium text-white/80 no-underline transition-colors hover:text-white" routerLink="/validation" (click)="closeMenus()">
                   Validation
                 </a>
-              </li> |
+              </li>
             }
 
             <!-- Accès Administration pour RH -->
@@ -64,7 +64,7 @@ import { IconComponent } from '../shared/icon/icon';
                 <a class="nav-text-link text-sm font-medium text-white/80 no-underline transition-colors hover:text-white" routerLink="/users" (click)="closeMenus()">
                   Gestion RH
                 </a>
-              </li> |
+              </li>
             }
 
             <!-- Cloche de notifications -->
@@ -77,7 +77,7 @@ import { IconComponent } from '../shared/icon/icon';
                   </span>
                 }
               </a>
-            </li> |
+            </li>
 
             <!-- Profil utilisateur avec Dropdown -->
             <li class="relative">
@@ -128,7 +128,7 @@ import { IconComponent } from '../shared/icon/icon';
                   </div>
                 </div>
               }
-            </li> |
+            </li>
 
           } @else {
             <li>
@@ -136,7 +136,7 @@ import { IconComponent } from '../shared/icon/icon';
                 <app-icon name="log-in" />
                 Connexion
               </a>
-            </li> |
+            </li>
           }
 
           <!-- Bascule Mode Clair / Sombre -->

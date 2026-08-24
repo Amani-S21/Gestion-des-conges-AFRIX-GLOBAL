@@ -1,15 +1,17 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'access-denied',
-  standalone: true,
+  imports: [RouterLink],
   template: `
-    <div class="p-24px">
-      <h2>Accès refusé</h2>
+    <main class="mx-auto flex min-h-[calc(100vh-12rem)] w-full max-w-2xl flex-col items-center justify-center px-4 py-16 text-center" aria-labelledby="access-denied-title">
+      <p class="text-sm font-bold uppercase tracking-[0.18em] text-(--color-danger)">Accès sécurisé</p>
+      <h1 id="access-denied-title" class="mt-3 text-3xl font-extrabold text-(--color-text)">Accès refusé</h1>
       <p>Vous n'avez pas les permissions nécessaires pour accéder à cette page.</p>
-      <a routerLink="/">Retour à l'accueil</a>
-    </div>
+      <a class="btn mt-6 no-underline" routerLink="/">Retour à l'accueil</a>
+    </main>
   `,
   styles: [],
 })
-export default class AccessDenied {}
+export default class AccessDenied { }

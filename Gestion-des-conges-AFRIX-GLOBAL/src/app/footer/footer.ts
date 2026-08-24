@@ -6,7 +6,7 @@ import { IconComponent } from '../shared/icon/icon';
   selector: 'app-footer',
   imports: [IconComponent, RouterLink],
   template: `
-  <footer id="contact" class="sticky bottom-0 z-30 mt-8 w-full scroll-mt-6 border-0 bg-(--color-footer) px-4 py-8 text-white shadow-[0_-4px_16px_rgba(0,0,0,0.12)] sm:px-6" aria-label="Pied de page">
+  <footer id="contact" class="mt-8 w-full scroll-mt-6 border-0 bg-(--color-footer) px-4 py-8 text-white shadow-[0_-4px_16px_rgba(0,0,0,0.12)] sm:px-6" aria-label="Pied de page">
     <div class="mx-auto w-full max-w-7xl">
       <div class="grid gap-8 text-center sm:grid-cols-2 sm:text-left lg:grid-cols-[1.5fr_1fr_1fr]">
         <div>
@@ -25,8 +25,9 @@ import { IconComponent } from '../shared/icon/icon';
           </h2>
           <ul class="mt-3 space-y-2 text-sm">
             <li><a class="text-white/80 no-underline transition-opacity duration-200 hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" routerLink="/">Accueil</a></li>
-            <li><a class="text-white/80 no-underline transition-opacity duration-200 hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" routerLink="/dashboard">Tableau de bord</a></li>
-            <li><a class="text-white/80 no-underline transition-opacity duration-200 hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" routerLink="/conges">Mes congés</a></li>
+            <li><a class="text-white/80 no-underline transition-opacity duration-200 hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" routerLink="/auth">Se connecter</a></li>
+            <li><a class="text-white/80 no-underline transition-opacity duration-200 hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" routerLink="/" fragment="fonctionnalites">Fonctionnalités</a></li>
+            <li><a class="text-white/80 no-underline transition-opacity duration-200 hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white" href="https://www.afrix.global/fr" fragment="contact">Contact</a></li>
           </ul>
         </nav>
 
