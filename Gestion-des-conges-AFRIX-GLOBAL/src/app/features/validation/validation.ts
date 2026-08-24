@@ -23,7 +23,7 @@ import { ModalComponent } from '../../shared/modal/modal';
           </p>
         </div>
         <a routerLink="/dashboard" class="btn btn-secondary no-underline">
-          <app-icon name="chevron" />
+          <app-icon name="arrow-left" />
           Tableau de bord
         </a>
       </div>
@@ -40,9 +40,25 @@ import { ModalComponent } from '../../shared/modal/modal';
         </div>
       }
 
-      @if (isLoading()) {
-        <div class="card p-12 text-center text-(--color-text-secondary)">
-          Chargement de la file des demandes à valider...
+            @if (isLoading()) {
+        <div class="grid gap-6 lg:grid-cols-[minmax(20rem,0.85fr)_minmax(0,1.4fr)] animate-pulse">
+          <div class="space-y-3">
+            <div class="h-6 w-36 rounded bg-slate-200 dark:bg-slate-700"></div>
+            @for (i of [1, 2, 3]; track i) {
+              <div class="card p-5 space-y-3">
+                <div class="h-4 w-32 rounded bg-slate-200 dark:bg-slate-700"></div>
+                <div class="h-3 w-48 rounded bg-slate-200 dark:bg-slate-700"></div>
+              </div>
+            }
+          </div>
+          <div class="card p-6 space-y-5">
+            <div class="h-6 w-48 rounded bg-slate-200 dark:bg-slate-700"></div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="h-12 rounded bg-slate-200 dark:bg-slate-700"></div>
+              <div class="h-12 rounded bg-slate-200 dark:bg-slate-700"></div>
+            </div>
+            <div class="h-20 rounded bg-slate-200 dark:bg-slate-700"></div>
+          </div>
         </div>
       } @else if (requests().length === 0) {
         <section class="card p-12 text-center">

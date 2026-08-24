@@ -19,8 +19,14 @@ import { IconComponent } from '../../shared/icon/icon';
           <p class="mt-2 text-(--color-text-secondary)">Retrouvez toutes vos demandes, leurs statuts et les décisions associées.</p>
         </div>
         <a routerLink="/conges" class="btn no-underline">
-          <app-icon name="calendar" />
+          <app-icon name="plus" />
           Nouvelle demande
+        </a>
+      </div>
+      <div class="mt-8 mb-8 flex items-center justify-between border-t border-(--color-text)/10 pt-5">
+        <a class="inline-flex items-center gap-2 text-sm text-(--color-primary) no-underline hover:underline" routerLink="/dashboard">
+          <app-icon name="arrow-left" />
+          Retour au tableau de bord
         </a>
       </div>
 
@@ -28,7 +34,7 @@ import { IconComponent } from '../../shared/icon/icon';
       <div class="mb-6 grid gap-3 sm:grid-cols-4">
         <button
           type="button"
-          class="rounded-2xl p-4 text-left transition-all hover:scale-[1.02]"
+          class="card rounded-2xl p-4 text-left transition-all hover:scale-[1.02]"
           [class.ring-2]="selectedFilter() === null"
           [class.ring-(--color-primary)]="selectedFilter() === null"
           [class.bg-slate-100]="selectedFilter() === null"
@@ -40,7 +46,7 @@ import { IconComponent } from '../../shared/icon/icon';
 
         <button
           type="button"
-          class="rounded-2xl p-4 text-left transition-all hover:scale-[1.02]"
+          class="card rounded-2xl p-4 text-left transition-all hover:scale-[1.02]"
           [class.ring-2]="selectedFilter() === 'EN_ATTENTE'"
           [class.ring-amber-500]="selectedFilter() === 'EN_ATTENTE'"
           [class.bg-amber-100]="selectedFilter() === 'EN_ATTENTE'"
@@ -52,7 +58,7 @@ import { IconComponent } from '../../shared/icon/icon';
 
         <button
           type="button"
-          class="rounded-2xl p-4 text-left transition-all hover:scale-[1.02]"
+          class="card rounded-2xl p-4 text-left transition-all hover:scale-[1.02]"
           [class.ring-2]="selectedFilter() === 'APPROUVEE'"
           [class.ring-emerald-500]="selectedFilter() === 'APPROUVEE'"
           [class.bg-emerald-100]="selectedFilter() === 'APPROUVEE'"
@@ -64,7 +70,7 @@ import { IconComponent } from '../../shared/icon/icon';
 
         <button
           type="button"
-          class="rounded-2xl p-4 text-left transition-all hover:scale-[1.02]"
+          class="card rounded-2xl p-4 text-left transition-all hover:scale-[1.02]"
           [class.ring-2]="selectedFilter() === 'REFUSEE'"
           [class.ring-red-500]="selectedFilter() === 'REFUSEE'"
           [class.bg-red-100]="selectedFilter() === 'REFUSEE'"
@@ -76,14 +82,25 @@ import { IconComponent } from '../../shared/icon/icon';
       </div>
 
       <!-- État de chargement -->
-      @if (isLoading()) {
-        <div class="card p-10 text-center text-(--color-text-secondary)">
-          Chargement de votre historique...
+            @if (isLoading()) {
+        <div class="grid gap-4 animate-pulse">
+          @for (i of [1, 2, 3, 4]; track i) {
+            <div class="card p-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+              <div class="space-y-2 flex-1">
+                <div class="flex gap-3">
+                  <div class="h-4 w-36 rounded bg-slate-200 dark:bg-slate-700"></div>
+                  <div class="h-4 w-20 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+                </div>
+                <div class="h-3 w-56 rounded bg-slate-200 dark:bg-slate-700"></div>
+              </div>
+              <div class="h-8 w-24 rounded-lg bg-slate-200 dark:bg-slate-700"></div>
+            </div>
+          }
         </div>
       } @else if (filteredRequests().length === 0) {
         <section class="card p-10 text-center" aria-live="polite">
           <div class="mx-auto grid size-12 place-items-center rounded-2xl bg-gray-100 text-gray-400">
-            <app-icon name="calendar" />
+            <app-icon name="file-text" />
           </div>
           <p class="mt-4 font-semibold text-(--color-text)">Aucune demande trouvée</p>
           <p class="mt-1 text-sm text-(--color-text-secondary)">
@@ -151,8 +168,8 @@ import { IconComponent } from '../../shared/icon/icon';
 
       <!-- Liens de navigation -->
       <div class="mt-8 flex items-center justify-between border-t border-(--color-text)/10 pt-5">
-        <a class="inline-flex items-center gap-2 text-sm text-(--color-primary) no-underline" routerLink="/dashboard">
-          <app-icon name="chevron" />
+        <a class="inline-flex items-center gap-2 text-sm text-(--color-primary) no-underline hover:underline" routerLink="/dashboard">
+          <app-icon name="arrow-left" />
           Retour au tableau de bord
         </a>
       </div>

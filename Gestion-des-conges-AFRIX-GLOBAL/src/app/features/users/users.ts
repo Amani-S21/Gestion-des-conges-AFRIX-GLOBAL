@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { UserApiService } from '../../core/services/user-api.service';
 import { CurrentUser, UserRole } from '../../core/auth/auth.service';
@@ -9,7 +9,7 @@ import { ModalComponent } from '../../shared/modal/modal';
 @Component({
   selector: 'app-users',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, RouterLink, IconComponent, ModalComponent],
+  imports: [FormsModule, ReactiveFormsModule, RouterLink, IconComponent, ModalComponent],
   template: `
     <main class="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8" aria-labelledby="users-title">
       
@@ -17,16 +17,39 @@ import { ModalComponent } from '../../shared/modal/modal';
       <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
           <p class="text-sm font-semibold uppercase tracking-[0.18em] text-(--color-primary)">Administration RH</p>
-          <h1 id="users-title" class="mt-2 text-3xl font-bold text-(--color-text)">Gestion des employés</h1>
+          <h1 id="users-title" class="mt-2 text-3xl font-bold text-(--color-text)">Annuaire des collaborateurs</h1>
           <p class="mt-2 text-(--color-text-secondary)">
-            Gérez les comptes collaborateurs, leurs rôles et la hiérarchie de validation.
+            Gérez les comptes employés, leurs rôles et la hiérarchie de validation.
           </p>
         </div>
         <div class="flex flex-wrap items-center gap-3">
-          <button class="btn" type="button" (click)="openCreateModal()">
+          <button class="btn flex items-center gap-2 text-sm" type="button" (click)="openCreateModal()">
             <app-icon name="plus" />
             Nouvel employé
           </button>
+        </div>
+      </div>
+      <div class="mt-8 border-t border-(--color-text)/10 pt-6">
+        <a routerLink="/dashboard" class="inline-flex items-center gap-2 text-sm text-(--color-primary) no-underline hover:underline">
+          <app-icon name="arrow-left" />
+          Retour au tableau de bord
+        </a>
+      </div>
+      <!-- Barre de recherche et filtres rapides -->
+      <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div class="relative w-full max-w-sm">
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            placeholder="Rechercher par nom, email, matricule..."
+            class="field-input w-full pl-3 text-xs" />
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-semibold text-slate-500">Total :</span>
+          <span class="rounded-full bg-(--color-primary)/10 px-3 py-0.5 text-xs font-bold text-(--color-primary)">
+            {{ filteredUsers().length }} collaborateur(s)
+          </span>
         </div>
       </div>
 
@@ -42,73 +65,90 @@ import { ModalComponent } from '../../shared/modal/modal';
         </div>
       }
 
-      <!-- État de chargement -->
+      <!-- État de chargement (Skeleton) -->
       @if (isLoading()) {
-        <div class="card p-12 text-center text-(--color-text-secondary)">
-          Chargement de l'annuaire des employés...
+        <div class="card p-6 space-y-4 animate-pulse">
+          <div class="h-5 w-48 rounded bg-slate-200 dark:bg-slate-700"></div>
+          @for (i of [1, 2, 3, 4, 5]; track i) {
+            <div class="flex items-center justify-between py-3 border-b border-slate-100 dark:border-slate-800">
+              <div class="flex items-center gap-3">
+                <div class="size-9 rounded-xl bg-slate-200 dark:bg-slate-700"></div>
+                <div class="space-y-1">
+                  <div class="h-4 w-32 rounded bg-slate-200 dark:bg-slate-700"></div>
+                  <div class="h-3 w-44 rounded bg-slate-200 dark:bg-slate-700"></div>
+                </div>
+              </div>
+              <div class="h-4 w-20 rounded bg-slate-200 dark:bg-slate-700"></div>
+              <div class="h-4 w-24 rounded bg-slate-200 dark:bg-slate-700"></div>
+              <div class="h-6 w-20 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+            </div>
+          }
         </div>
       } @else {
         
         <!-- Tableau des employés -->
         <div class="card overflow-x-auto p-0 shadow-sm">
           <table class="w-full text-left text-sm">
-            <thead class="border-b border-(--color-text)/10 bg-slate-50 text-xs font-bold uppercase text-(--color-text-secondary)">
+            <thead class="card border-b border-slate-200/80  text-xs font-bold uppercase text-(--color-text-secondary)">
               <tr>
-                <th class="px-6 py-4">Employé</th>
+                <th class="px-6 py-4">Collaborateur</th>
                 <th class="px-6 py-4">Matricule</th>
                 <th class="px-6 py-4">Département</th>
                 <th class="px-6 py-4">Rôle</th>
                 <th class="px-6 py-4">Statut</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-(--color-text)/5">
-              @for (user of users(); track user.id) {
-                <tr class="hover:bg-slate-50/50">
-                  <td class="px-6 py-4">
-                    <div class="flex items-center gap-3">
-                      <div class="grid size-9 place-items-center rounded-xl bg-(--color-primary)/10 font-bold text-(--color-primary)">
-                        {{ user.prenom[0] }}{{ user.nom[0] }}
-                      </div>
-                      <div>
-                        <p class="font-bold text-(--color-text)">{{ user.prenom }} {{ user.nom }}</p>
-                        <p class="text-xs text-(--color-text-secondary)">{{ user.email }}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 font-mono text-xs font-semibold">{{ user.matricule }}</td>
-                  <td class="px-6 py-4">{{ user.departement }}</td>
-                  <td class="px-6 py-4">
-                    <span class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
-                      [class.bg-emerald-100]="user.role === 'EMPLOYE'"
-                      [class.text-emerald-800]="user.role === 'EMPLOYE'"
-                      [class.bg-amber-100]="user.role === 'MANAGER'"
-                      [class.text-amber-800]="user.role === 'MANAGER'"
-                      [class.bg-purple-100]="user.role === 'RH_ADMIN'"
-                      [class.text-purple-800]="user.role === 'RH_ADMIN'">
-                      {{ getRoleLabel(user.role) }}
-                    </span>
-                  </td>
-                  <td class="px-6 py-4">
-                    <span class="inline-flex items-center gap-1.5 text-xs font-medium"
-                      [class.text-emerald-700]="user.is_active"
-                      [class.text-gray-500]="!user.is_active">
-                      <span class="size-2 rounded-full" [class.bg-emerald-500]="user.is_active" [class.bg-gray-400]="!user.is_active"></span>
-                      {{ user.is_active ? 'Actif' : 'Inactif' }}
-                    </span>
-                  </td>
-                </tr>
-              }
+            
+            <tbody class="divide-none">
+  @for (user of filteredUsers(); track user.id) {
+    
+    <tr class="border-b border-slate-500 dark:border-slate-800 last:border-none hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
+      
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-3">
+          <div class="grid size-9 place-items-center rounded-xl bg-(--color-primary)/10 font-bold text-(--color-primary) text-xs">
+            {{ user.prenom[0] }}{{ user.nom[0] }}
+          </div>
+          <div>
+            <p class="font-bold text-(--color-text)">{{ user.prenom }} {{ user.nom }}</p>
+            <p class="text-xs text-(--color-text-secondary)">{{ user.email }}</p>
+          </div>
+        </div>
+      </td>
+      
+      <td class="px-6 py-4 font-mono text-xs font-semibold">{{ user.matricule }}</td>
+      <td class="px-6 py-4">{{ user.departement }}</td>
+      
+      <td class="px-6 py-4">
+        <span class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
+          [class.bg-emerald-100]="user.role === 'EMPLOYE'"
+          [class.text-emerald-800]="user.role === 'EMPLOYE'"
+          [class.bg-amber-100]="user.role === 'MANAGER'"
+          [class.text-amber-800]="user.role === 'MANAGER'"
+          [class.bg-purple-100]="user.role === 'RH_ADMIN'"
+          [class.text-purple-800]="user.role === 'RH_ADMIN'">
+          {{ getRoleLabel(user.role) }}
+        </span>
+      </td>
+      
+      <td class="px-6 py-4">
+        <span class="inline-flex items-center gap-1.5 text-xs font-medium"
+          [class.text-emerald-700]="user.is_active"
+          [class.text-gray-500]="!user.is_active">
+          <span class="size-2 rounded-full" [class.bg-emerald-500]="user.is_active" [class.bg-gray-400]="!user.is_active"></span>
+          {{ user.is_active ? 'Actif' : 'Inactif' }}
+        </span>
+      </td>
+      
+    </tr>
+  }
             </tbody>
+
           </table>
         </div>
       }
 
-      <div class="mt-8 border-t border-(--color-text)/10 pt-6">
-        <a routerLink="/dashboard" class="inline-flex items-center gap-2 text-sm text-(--color-primary) no-underline">
-          <app-icon name="chevron" />
-          Retour au tableau de bord
-        </a>
-      </div>
+      
 
     </main>
 
@@ -201,6 +241,21 @@ export default class Users implements OnInit {
   readonly successMessage = signal<string | null>(null);
   readonly users = signal<CurrentUser[]>([]);
   readonly createModalOpen = signal(false);
+
+  searchQuery = '';
+
+  readonly filteredUsers = computed(() => {
+    const query = this.searchQuery.toLowerCase().trim();
+    if (!query) return this.users();
+    return this.users().filter(
+      (u) =>
+        u.prenom.toLowerCase().includes(query) ||
+        u.nom.toLowerCase().includes(query) ||
+        u.email.toLowerCase().includes(query) ||
+        u.matricule.toLowerCase().includes(query) ||
+        (u.departement && u.departement.toLowerCase().includes(query))
+    );
+  });
 
   readonly userForm = new FormGroup({
     prenom: new FormControl('', [Validators.required]),

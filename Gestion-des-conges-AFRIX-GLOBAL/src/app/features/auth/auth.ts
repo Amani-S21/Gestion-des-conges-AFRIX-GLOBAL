@@ -138,7 +138,7 @@ import { IconComponent } from '../../shared/icon/icon';
       <!-- Lien de retour -->
       <div class="mt-6 text-center">
         <a routerLink="/" class="inline-flex items-center gap-1 text-sm text-(--color-text-secondary) hover:text-(--color-primary)">
-          <app-icon name="chevron" />
+          <app-icon name="arrow-left" />
           Retour à la page d'accueil
         </a>
       </div>

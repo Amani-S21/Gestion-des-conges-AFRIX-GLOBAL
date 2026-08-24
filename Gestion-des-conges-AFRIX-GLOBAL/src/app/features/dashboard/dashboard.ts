@@ -52,13 +52,13 @@ import { IconComponent } from '../../shared/icon/icon';
 
       <!-- Alerte Manager / RH s'il y a des demandes en attente -->
       @if (isManagerOrRH() && demandesAValider().length > 0) {
-        <div class="mb-8 flex flex-col items-start justify-between gap-4 rounded-2xl border border-amber-200 bg-amber-50 p-5 sm:flex-row sm:items-center">
+        <div class=" card mb-8 flex flex-col items-start justify-between gap-4 rounded-2xl bg-amber-50 p-5 sm:flex-row sm:items-center">
           <div class="flex items-center gap-3">
             <span class="grid size-10 place-items-center rounded-xl bg-amber-500 text-white">
               <app-icon name="clock" />
             </span>
             <div>
-              <p class="font-semibold text-amber-900">
+              <p class="font-semibold text-(--color-primary)">
                 {{ demandesAValider().length }} demande(s) en attente de votre décision
               </p>
               <p class="text-sm text-amber-700">
@@ -131,9 +131,17 @@ import { IconComponent } from '../../shared/icon/icon';
           </a>
         </div>
 
-        @if (isLoading()) {
-          <div class="card p-6 text-center text-(--color-text-secondary)">
-            Chargement de vos demandes...
+                @if (isLoading()) {
+          <div class="grid gap-3 animate-pulse">
+            @for (i of [1, 2, 3]; track i) {
+              <div class="card p-5 flex justify-between items-center">
+                <div class="space-y-2">
+                  <div class="h-4 w-36 rounded bg-slate-200 dark:bg-slate-700"></div>
+                  <div class="h-3 w-48 rounded bg-slate-200 dark:bg-slate-700"></div>
+                </div>
+                <div class="h-8 w-20 rounded-lg bg-slate-200 dark:bg-slate-700"></div>
+              </div>
+            }
           </div>
         } @else if (mesDemandes().length === 0) {
           <div class="card flex flex-col items-center justify-center p-10 text-center">
