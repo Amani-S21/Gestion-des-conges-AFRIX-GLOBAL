@@ -1,4 +1,5 @@
-﻿import { ChangeDetectionStrategy, Component } from '@angular/core';
+﻿import { isPlatformBrowser } from '@angular/common';
+import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, ElementRef, inject, NgZone, PLATFORM_ID, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { IconComponent } from '../../shared/icon/icon';
 
@@ -9,137 +10,43 @@ import { IconComponent } from '../../shared/icon/icon';
   template: `
   <div class="overflow-hidden">
     
-    <!-- 1. HERO SECTION -->
-    <section class="home-reveal relative mx-auto grid w-full max-w-7xl gap-12 px-4 pb-16 pt-8 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:px-8 lg:pb-24 lg:pt-12" aria-labelledby="hero-title">
-      
-      <!-- Colonne gauche : Titre & CTA -->
-      <div class="relative z-10">
-        
-        <!-- Badge de marque -->
-        <div class="mb-6 inline-flex max-w-full flex-wrap items-center gap-2 rounded-full border border-(--color-primary)/20 bg-(--color-primary)/10 px-3.5 py-1 text-xs font-bold leading-5 text-(--color-primary)">
-          <span class="size-2 rounded-full bg-(--color-primary) animate-pulse"></span>
-          Gestion RH des congés
+    <section class="hero-stage relative isolate min-h-[min(760px,calc(100vh-3.5rem))] overflow-hidden text-white" aria-labelledby="hero-title" (mouseenter)="pauseHero()" (mouseleave)="resumeHero()" (focusin)="pauseHero()" (focusout)="resumeHero()">
+      @for (slide of heroSlides; track slide.id; let index = $index) {
+        <div class="hero-slide absolute inset-0" [class.hero-slide-active]="activeHero() === index" [style.background-image]="'url(' + slide.image + ')'" aria-hidden="true"></div>
+      }
+      <div class="absolute inset-0 bg-(--color-header)/85"></div>
+      <div class="hero-grid absolute inset-0 opacity-30" aria-hidden="true"></div>
+
+      <div class="relative mx-auto flex min-h-[min(760px,calc(100vh-3.5rem))] w-full max-w-7xl flex-col justify-between px-4 pb-8 pt-8 sm:px-6 lg:px-8 lg:pb-12 lg:pt-12">
+        <div class="flex items-start justify-between gap-4">
+          <span class="hidden text-right text-xs font-semibold uppercase tracking-[0.18em] text-white/60 sm:block">Gestion des congés<br />et des absences</span>
         </div>
 
-        <h1 id="hero-title" class="max-w-3xl text-4xl font-extrabold leading-tight tracking-tight text-(--color-text) sm:text-5xl lg:text-6xl">
-          Une gestion des congés <span class="text-(--color-primary)">simple, fiable et visible.</span>
-        </h1>
-        
-        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-(--color-text-secondary)">
-          AfriPause centralise les demandes d'absence, automatise le calcul des jours ouvrés et donne à chaque collaborateur, manager et équipe RH une vision claire des disponibilités.
-        </p>
-
-        <div class="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-          <a class="btn flex items-center gap-2 px-8 py-3.5 text-base font-bold shadow-lg shadow-(--color-primary)/25 hover:shadow-xl transition-all no-underline" routerLink="/auth">
-            Se connecter
-            <app-icon name="arrow-right" />
-          </a>
-          <a class="inline-flex items-center justify-center gap-2 rounded-full border border-(--color-primary)/30 px-7 py-3.5 text-base font-bold text-(--color-primary) no-underline transition-colors hover:bg-(--color-primary)/10" href="#fonctionnement">
-            Découvrir la plateforme
-            <app-icon name="chevron" />
-          </a>
-        </div>
-
-        <!-- Points de réassurance -->
-        <div class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-xs font-semibold text-(--color-text-secondary)">
-          <span class="inline-flex items-center gap-1.5">
-            <span class="grid size-4 place-items-center rounded-full bg-emerald-100 text-emerald-600">✓</span>
-            Calcul automatique des jours ouvrés
-          </span>
-          <span class="inline-flex items-center gap-1.5">
-            <span class="grid size-4 place-items-center rounded-full bg-emerald-100 text-emerald-600">✓</span>
-            Circuit de validation en 1 clic
-          </span>
-          <span class="inline-flex items-center gap-1.5">
-            <span class="grid size-4 place-items-center rounded-full bg-emerald-100 text-emerald-600">✓</span>
-            Soldes en temps réel
-          </span>
-        </div>
-
-      </div>
-
-      <!-- Colonne droite : Aperçu d'Interface SaaS AfriPause -->
-      <div class="home-reveal home-reveal-delay-1 relative rounded-3xl border border-slate-200/80 bg-white/90 p-6 shadow-2xl backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/90 sm:p-7">
-        
-        <!-- Décoration lumineuse d'arrière-plan -->
-        <div class="absolute -right-6 -top-6 size-32 rounded-full bg-(--color-primary)/15 blur-3xl"></div>
-        <div class="absolute -bottom-6 -left-6 size-32 rounded-full bg-emerald-500/10 blur-3xl"></div>
-
-        <div class="relative space-y-4">
-          
-          <!-- En-tête de la mini interface -->
-          <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
-            <div class="flex items-center gap-2.5">
-              <img src="assets/afrix.png" alt="AfriPause" class="h-6 w-auto" />
-              <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Espace Collaborateur</span>
-            </div>
-            <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
-              <span class="size-1.5 rounded-full bg-emerald-500"></span>
-              Synchronisé
-            </span>
-          </div>
-
-          <!-- Carte de solde dynamique simulée -->
-          <div class="rounded-2xl border-l-4 border-(--color-primary) bg-slate-50/80 dark:bg-slate-800/60 p-4">
-            <div class="flex items-center justify-between">
-              <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Congés Payés Annuels</p>
-              <span class="text-xs font-bold text-(--color-primary)">2026</span>
-            </div>
-            <div class="mt-2 flex items-baseline gap-2">
-              <span class="text-3xl font-extrabold text-(--color-primary)">22.0</span>
-              <span class="text-xs font-medium text-slate-500">jours restants disponibles</span>
-            </div>
-            <!-- Jauge de consommation -->
-            <div class="mt-3 space-y-1">
-              <div class="flex justify-between text-[11px] font-semibold text-slate-500">
-                <span>Consommation</span>
-                <span>3 / 25 jours</span>
-              </div>
-              <div class="h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
-                <div class="h-full rounded-full bg-(--color-primary)" style="width: 12%"></div>
-              </div>
+        <div class="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(360px,0.7fr)] lg:items-end">
+          <div class="max-w-3xl">
+            <p class="hero-kicker text-sm font-bold uppercase tracking-[0.2em] text-(--color-primary-light)">{{ heroSlides[activeHero()].eyebrow }}</p>
+            <h1 id="hero-title" class="hero-copy mt-4 min-h-[7.5rem] text-4xl font-extrabold leading-[1.05] tracking-tight sm:min-h-[8rem] sm:text-6xl lg:min-h-[9rem] lg:text--xl">{{ displayedHeroTitle() }}</h1>
+            <p class="hero-copy mt-6 min-h-[6rem] max-w-2xl text-base leading-relaxed text-white/80 sm:min-h-[4.5rem] sm:text-lg">{{ displayedHeroDescription() }}</p>
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a class="btn hero-cta flex items-center justify-center gap-2 px-8 py-3.5 text-base font-bold no-underline" routerLink="/auth">Se connecter <app-icon name="arrow-right" /></a>
+              <a class="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 px-7 py-3.5 text-base font-bold text-white no-underline transition-colors hover:bg-white/10" href="#fonctionnement">Découvrir AfriPause <app-icon name="chevron" /></a>
             </div>
           </div>
 
-          <!-- Mini liste des demandes récentes -->
-          <div class="space-y-2 pt-1">
-            <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Dernière activité</p>
-            
-            <div class="flex items-center justify-between rounded-xl border border-slate-100 bg-white p-3 dark:border-slate-800 dark:bg-slate-800/40">
-              <div class="flex items-center gap-2.5">
-                <span class="grid size-8 place-items-center rounded-lg bg-amber-500/10 text-amber-600">
-                  <app-icon name="clock" />
+          <div class="hero-tabs rounded-2xl border border-white/15 bg-black/20 p-2 backdrop-blur-md" role="tablist" aria-label="Découvrir AfriPause par profil">
+            @for (slide of heroSlides; track slide.id; let index = $index) {
+              <button type="button" role="tab" class="hero-tab flex w-full items-start gap-3 rounded-xl px-4 py-3 text-left transition-colors" [class.hero-tab-active]="activeHero() === index" [attr.aria-selected]="activeHero() === index" [attr.tabindex]="activeHero() === index ? 0 : -1" (click)="selectHero(index)">
+                <span class="mt-1 text-xs font-black text-white/50">0{{ index + 1 }}</span>
+                <span class="min-w-0 flex-1">
+                  <span class="block text-sm font-bold">{{ slide.label }}</span>
+                  <span class="mt-1 block text-xs text-white/60">{{ slide.shortDescription }}</span>
+                  <span class="hero-progress mt-3 block h-0.5 origin-left rounded-full bg-(--color-primary-light)" [class.hero-progress-running]="activeHero() === index && !heroPaused()"></span>
                 </span>
-                <div>
-                  <p class="text-xs font-bold text-slate-800 dark:text-slate-200">Congés d'été (5j ouvrés)</p>
-                  <p class="text-[11px] text-slate-500">Du 14/09 au 18/09/2026</p>
-                </div>
-              </div>
-              <span class="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800 dark:bg-amber-950/50 dark:text-amber-300">
-                En attente
-              </span>
-            </div>
-
-            <div class="flex items-center justify-between rounded-xl border border-slate-100 bg-white p-3 dark:border-slate-800 dark:bg-slate-800/40">
-              <div class="flex items-center gap-2.5">
-                <span class="grid size-8 place-items-center rounded-lg bg-emerald-500/10 text-emerald-600">
-                  <app-icon name="check" />
-                </span>
-                <div>
-                  <p class="text-xs font-bold text-slate-800 dark:text-slate-200">Pont RTT (1j ouvré)</p>
-                  <p class="text-[11px] text-slate-500">Validé par le manager</p>
-                </div>
-              </div>
-              <span class="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">
-                Approuvée
-              </span>
-            </div>
+              </button>
+            }
           </div>
-
         </div>
-
       </div>
-
     </section>
 
     <section class="border-y border-(--color-primary)/10 bg-(--color-primary)/5 px-4 py-7 sm:px-6 lg:px-8" aria-label="Engagements de la plateforme">
@@ -259,8 +166,8 @@ import { IconComponent } from '../../shared/icon/icon';
           </p>
         </article>
 
-        <article class="card p-6 border-t-4 border-purple-500 hover:-translate-y-1 transition-all">
-          <span class="grid size-10 place-items-center rounded-xl bg-purple-500/10 text-purple-600">
+        <article class="card border-t-4 border-(--color-primary) p-6 transition-all hover:-translate-y-1">
+          <span class="grid size-10 place-items-center rounded-xl bg-(--color-primary)/10 text-(--color-primary)">
             <app-icon name="shield" />
           </span>
           <h3 class="mt-4 text-base font-bold text-(--color-text)">Pilotage RH & Rapports</h3>
@@ -335,17 +242,17 @@ import { IconComponent } from '../../shared/icon/icon';
       <h2 id="profils-title" class="mt-3 text-3xl font-extrabold text-white"> Une interface adaptée à chaque profil </h2> 
     </div> 
     <div class="mt-10 grid gap-6 md:grid-cols-3"> 
-      <div class="card p-6 border-l-4 border-(--color-primary)"> 
+    <div class="card border-l-4 border-(--color-primary) bg-white/10 p-6"> 
         <p class="text-xs font-bold uppercase text-(--color-primary)">Collaborateur</p> 
         <h3 class="mt-2 text-lg font-bold text-white">Autonomie & Visibilité</h3> 
         <p class="mt-2 text-xs text-white/75 leading-relaxed"> Déposez vos demandes en 30 secondes, suivez l'avancement de vos dossiers et connaissez toujours vos droits restants. </p> 
       </div> 
-      <div class="card p-6 border-l-4 border-(--color-warning)"> 
+      <div class="card border-l-4 border-(--color-warning) bg-white/10 p-6"> 
         <p class="text-xs font-bold uppercase text-(--color-warning)">Manager d'Équipe</p> 
         <h3 class="mt-2 text-lg font-bold text-white">Décision & Sérénité</h3> 
         <p class="mt-2 text-xs text-white/75 leading-relaxed"> Recevez des notifications immédiates, examinez les motifs et validez les absences sans perturber le planning de votre équipe. </p> 
       </div> 
-      <div class="card p-6 border-l-4 border-(--color-success)"> 
+      <div class="card border-l-4 border-(--color-success) bg-white/10 p-6"> 
         <p class="text-xs font-bold uppercase text-(--color-success)">Ressources Humaines</p> 
         <h3 class="mt-2 text-lg font-bold text-white">Contrôle & Conformité</h3> 
         <p class="mt-2 text-xs text-white/75 leading-relaxed"> Gérez les comptes employés, ajustez les quotas annuels et générez des synthèses d'activité fiables pour la direction. </p> 
@@ -380,4 +287,218 @@ import { IconComponent } from '../../shared/icon/icon';
   `,
   styles: ``,
 })
-export class Home { }
+export class Home implements AfterViewInit {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
+  private readonly ngZone = inject(NgZone);
+  private heroTimer: ReturnType<typeof setInterval> | null = null;
+  private typewriterTimer: ReturnType<typeof setTimeout> | null = null;
+  private heroVisibilityObserver: IntersectionObserver | null = null;
+  private scrollRevealObserver: IntersectionObserver | null = null;
+  private isHeroVisible = true;
+  private textAnimationId = 0;
+
+  readonly activeHero = signal(0);
+  readonly heroPaused = signal(false);
+
+  readonly heroSlides = [
+    {
+      id: 'overview',
+      label: "C'est quoi AfriPause ?",
+      eyebrow: 'Une plateforme, trois profils',
+      title: 'Les congés de votre équipe, enfin simples et visibles.',
+      description: "AfriPause centralise les demandes, les validations et les soldes dans un espace clair pour toute l'organisation.",
+      shortDescription: 'Une vision commune des absences.',
+      image: 'assets/AfriPause.jpg',
+    },
+    {
+      id: 'employee',
+      label: 'Collaborateur',
+      eyebrow: 'Pour chaque collaborateur',
+      title: 'Demandez vos congés sans perdre le fil.',
+      description: 'Consultez vos droits, choisissez vos dates et suivez chaque demande depuis un seul espace.',
+      shortDescription: 'Des droits lisibles, des demandes suivies.',
+      image: 'assets/collaborateur.jpg',
+    },
+    {
+      id: 'manager',
+      label: 'Manager',
+      eyebrow: "Pour les managers d'équipe",
+      title: 'Décidez plus vite, avec les bonnes informations.',
+      description: "Visualisez les demandes de votre équipe, examinez les périodes et validez les absences en quelques secondes.",
+      shortDescription: 'Une validation rapide et documentée.',
+      image: 'assets/manager.jpg',
+    },
+    {
+      id: 'hr',
+      label: 'Ressources humaines',
+      eyebrow: 'Pour les équipes RH',
+      title: 'Pilotez les absences avec une vision globale.',
+      description: 'Gérez les collaborateurs, les soldes, les historiques et les rapports depuis une plateforme centralisée.',
+      shortDescription: 'Le pilotage RH au même endroit.',
+      image: 'assets/RH.jpg',
+    },
+    {
+      id: 'team',
+      label: 'Organisation',
+      eyebrow: 'Pour toute l organisation',
+      title: 'Une équipe mieux coordonnée, toute l année.',
+      description: 'Réduisez les échanges dispersés et anticipez les absences grâce à une information partagée et fiable.',
+      shortDescription: 'Plus de clarté pour mieux planifier.',
+      image: 'assets/equipe.jpg',
+    },
+  ] as const;
+
+  readonly displayedHeroTitle = signal<string>(this.heroSlides[0].title);
+  readonly displayedHeroDescription = signal<string>(this.heroSlides[0].description);
+
+  constructor() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.destroyRef.onDestroy(() => {
+        this.stopHeroRotation();
+        this.stopTextAnimation();
+        this.heroVisibilityObserver?.disconnect();
+        this.scrollRevealObserver?.disconnect();
+      });
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    this.animateHeroText(this.activeHero());
+
+    const heroStage = this.elementRef.nativeElement.querySelector('.hero-stage');
+    if (heroStage) {
+      this.heroVisibilityObserver = new IntersectionObserver(([entry]) => {
+        this.isHeroVisible = entry.isIntersecting;
+        if (this.isHeroVisible) {
+          this.startHeroRotation();
+        } else {
+          this.stopHeroRotation();
+        }
+      }, { threshold: 0.15 });
+      this.heroVisibilityObserver.observe(heroStage);
+    }
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const revealElements: HTMLElement[] = Array.from(this.elementRef.nativeElement.querySelectorAll(
+      'section:not(.hero-stage), section:not(.hero-stage) article, section:not(.hero-stage) li',
+    ));
+
+    revealElements.forEach((element, index) => {
+      element.classList.add('scroll-reveal-ready');
+      element.style.setProperty('--reveal-delay', `${Math.min(index % 4, 3) * 80}ms`);
+    });
+
+    if (prefersReducedMotion) {
+      revealElements.forEach((element) => element.classList.add('scroll-reveal-visible'));
+      return;
+    }
+
+    this.scrollRevealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('scroll-reveal-visible');
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+
+    revealElements.forEach((element) => this.scrollRevealObserver?.observe(element));
+  }
+
+  selectHero(index: number): void {
+    this.showHero(index);
+    this.restartHeroRotation();
+  }
+
+  pauseHero(): void {
+    this.heroPaused.set(true);
+    this.stopHeroRotation();
+  }
+
+  resumeHero(): void {
+    this.heroPaused.set(false);
+    this.startHeroRotation();
+  }
+
+  private startHeroRotation(): void {
+    if (this.heroTimer || this.heroPaused() || !this.isHeroVisible || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    this.ngZone.runOutsideAngular(() => {
+      this.heroTimer = setInterval(() => {
+        this.ngZone.run(() => this.showHero((this.activeHero() + 1) % this.heroSlides.length));
+      }, 6000);
+    });
+  }
+
+  private showHero(index: number): void {
+    this.activeHero.set(index);
+    this.animateHeroText(index);
+  }
+
+  private animateHeroText(index: number): void {
+    this.stopTextAnimation();
+    const slide = this.heroSlides[index];
+    const animationId = ++this.textAnimationId;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.displayedHeroTitle.set(slide.title);
+      this.displayedHeroDescription.set(slide.description);
+      return;
+    }
+
+    this.displayedHeroTitle.set('');
+    this.displayedHeroDescription.set('');
+    let titlePosition = 0;
+    let descriptionPosition = 0;
+
+    const typeDescription = (): void => {
+      if (animationId !== this.textAnimationId) return;
+      this.displayedHeroDescription.set(slide.description.slice(0, descriptionPosition));
+      if (descriptionPosition < slide.description.length) {
+        descriptionPosition += 1;
+        this.ngZone.runOutsideAngular(() => {
+          this.typewriterTimer = setTimeout(typeDescription, 18);
+        });
+      }
+    };
+
+    const typeTitle = (): void => {
+      if (animationId !== this.textAnimationId) return;
+      this.displayedHeroTitle.set(slide.title.slice(0, titlePosition));
+      if (titlePosition < slide.title.length) {
+        titlePosition += 1;
+        this.ngZone.runOutsideAngular(() => {
+          this.typewriterTimer = setTimeout(typeTitle, 28);
+        });
+      } else {
+        this.ngZone.runOutsideAngular(() => {
+          this.typewriterTimer = setTimeout(typeDescription, 160);
+        });
+      }
+    };
+
+    typeTitle();
+  }
+
+  private stopTextAnimation(): void {
+    this.textAnimationId += 1;
+    if (this.typewriterTimer) {
+      clearTimeout(this.typewriterTimer);
+      this.typewriterTimer = null;
+    }
+  }
+
+  private stopHeroRotation(): void {
+    if (this.heroTimer) {
+      clearInterval(this.heroTimer);
+      this.heroTimer = null;
+    }
+  }
+
+  private restartHeroRotation(): void {
+    this.stopHeroRotation();
+    this.startHeroRotation();
+  }
+}

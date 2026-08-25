@@ -22,12 +22,16 @@ import { IconComponent } from '../shared/icon/icon';
       </a>
 
       <!-- Bouton Menu Mobile (Hamburger) -->
-      <button class="grid size-9 place-items-center rounded-lg border-0 bg-transparent text-white hover:bg-white/10 sm:hidden" type="button" [attr.aria-label]="menuOpen() ? 'Fermer le menu' : 'Ouvrir le menu'" [attr.aria-expanded]="menuOpen()" (click)="menuOpen.update((open) => !open)">
+      <button class="grid size-9 place-items-center rounded-lg border-0 bg-transparent text-white hover:bg-white/10 sm:hidden" type="button" [attr.aria-label]="menuOpen() ? 'Fermer le menu' : 'Ouvrir le menu'" [attr.aria-expanded]="menuOpen()" (click)="toggleMenu()">
         <app-icon [name]="menuOpen() ? 'close' : 'menu'" />
       </button>
 
+      @if (menuOpen()) {
+        <button class="mobile-nav-backdrop sm:hidden" type="button" aria-label="Fermer le menu" (click)="closeMenus()"></button>
+      }
+
       <!-- Navigation principale en texte pur -->
-      <nav class="w-full sm:block sm:w-auto" [class.hidden]="!menuOpen()" [class.block]="menuOpen()" aria-label="Navigation principale">
+      <nav class="mobile-navigation w-full sm:block sm:w-auto" [class.hidden]="!menuOpen()" [class.block]="menuOpen()" aria-label="Navigation principale">
         <ul class="flex flex-col gap-3 pt-4 sm:flex-row sm:items-center sm:gap-6 sm:pt-0">
           
           <li>
@@ -187,6 +191,84 @@ import { IconComponent } from '../shared/icon/icon';
       box-shadow: none !important;
       outline: none !important;
     }
+
+    .mobile-nav-backdrop {
+      display: none;
+    }
+
+    @media (max-width: 639px) {
+      .mobile-nav-backdrop {
+        display: block;
+        position: fixed;
+        inset: 4.25rem 0 0;
+        z-index: 10;
+        border: 0;
+        background: rgba(10, 31, 38, 0.58);
+        cursor: pointer;
+        animation: navBackdropIn 220ms ease both;
+      }
+
+      .mobile-navigation {
+        position: fixed;
+        inset: 4.25rem 0 auto;
+        z-index: 20;
+        max-height: calc(100dvh - 4.25rem);
+        overflow-y: auto;
+        padding: 1.25rem 1rem 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.14);
+        background: var(--color-header);
+        box-shadow: 0 24px 40px rgba(10, 31, 38, 0.28);
+        animation: mobileNavIn 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      .mobile-navigation ul {
+        gap: 0.35rem;
+      }
+
+      .mobile-navigation li {
+        animation: mobileNavItemIn 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      .mobile-navigation li:nth-child(2) { animation-delay: 35ms; }
+      .mobile-navigation li:nth-child(3) { animation-delay: 70ms; }
+      .mobile-navigation li:nth-child(4) { animation-delay: 105ms; }
+      .mobile-navigation li:nth-child(5) { animation-delay: 140ms; }
+
+      .mobile-navigation .nav-text-link {
+        display: flex;
+        min-height: 2.75rem;
+        align-items: center;
+        padding: 0.65rem 0.75rem;
+        border-radius: 0.75rem !important;
+      }
+
+      .mobile-navigation .nav-text-link:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+      }
+    }
+
+    @keyframes mobileNavIn {
+      from { opacity: 0; transform: translateY(-12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes mobileNavItemIn {
+      from { opacity: 0; transform: translateX(14px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes navBackdropIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .mobile-navigation,
+      .mobile-navigation li,
+      .mobile-nav-backdrop {
+        animation: none;
+      }
+    }
   `,
 })
 export class Navbar implements OnInit {
@@ -231,6 +313,18 @@ export class Navbar implements OnInit {
         distinctUntilChanged(),
         takeUntilDestroyed(this.destroyRef),
       ).subscribe((scrolled) => this.isScrolled.set(scrolled));
+
+      fromEvent<KeyboardEvent>(document, 'keydown').pipe(
+        takeUntilDestroyed(this.destroyRef),
+      ).subscribe((event) => {
+        if (event.key === 'Escape' && this.menuOpen()) {
+          this.closeMenus();
+        }
+      });
+
+      this.destroyRef.onDestroy(() => {
+        document.body.style.overflow = '';
+      });
     }
   }
 
@@ -249,6 +343,21 @@ export class Navbar implements OnInit {
   closeMenus(): void {
     this.menuOpen.set(false);
     this.profileDropdownOpen.set(false);
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = '';
+    }
+  }
+
+  toggleMenu(): void {
+    if (this.menuOpen()) {
+      this.closeMenus();
+      return;
+    }
+
+    this.menuOpen.set(true);
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   logout(): void {

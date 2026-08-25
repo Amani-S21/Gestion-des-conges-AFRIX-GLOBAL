@@ -26,6 +26,13 @@ export class CongeApiService {
     return this.http.get<DemandeConge[]>(`${this.apiUrl}/a-valider`);
   }
 
+  /** Récupère toutes les demandes pour la supervision Manager/RH. */
+  getToutesLesDemandes(statut?: StatutDemande): Observable<DemandeConge[]> {
+    let params = new HttpParams();
+    if (statut) params = params.set('statut', statut);
+    return this.http.get<DemandeConge[]>(`${this.apiUrl}/`, { params });
+  }
+
   /** Récupère le détail d'une demande par son ID */
   getDemandeById(id: number): Observable<DemandeConge> {
     return this.http.get<DemandeConge>(`${this.apiUrl}/${id}`);

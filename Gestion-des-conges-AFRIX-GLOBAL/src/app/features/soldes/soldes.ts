@@ -62,15 +62,17 @@ import { IconComponent } from '../../shared/icon/icon';
               <div>
                 <div class="flex items-center justify-between">
                   <h2 class="text-lg font-bold text-(--color-text)">{{ solde.type_conge?.libelle }}</h2>
-                  <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-700">
+                  <span class="rounded-full bg-(--color-primary)/10 px-2.5 py-0.5 text-xs font-semibold text-(--color-primary)">
                     {{ solde.type_conge?.code }}
                   </span>
                 </div>
 
-                @if (solde.type_conge?.description) {
-                  <p class="mt-1 text-xs text-(--color-text-secondary)">
-                    {{ solde.type_conge?.description }}
-                  </p>
+                @if (solde.type_conge; as typeConge) {
+                  @if (typeConge.description) {
+                    <p class="mt-1 text-xs text-(--color-text-secondary)">
+                      {{ typeConge.description }}
+                    </p>
+                  }
                 }
 
                 <!-- Solde restant principal -->
@@ -87,7 +89,7 @@ import { IconComponent } from '../../shared/icon/icon';
                     <span>Consommation</span>
                     <span>{{ getPourcentagePris(solde) }}%</span>
                   </div>
-                  <div class="h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
+                  <div class="h-2.5 w-full overflow-hidden rounded-full bg-(--color-primary)/10">
                     <div
                       class="h-full rounded-full bg-(--color-primary) transition-all duration-500"
                       [style.width.%]="getPourcentagePris(solde)"></div>
