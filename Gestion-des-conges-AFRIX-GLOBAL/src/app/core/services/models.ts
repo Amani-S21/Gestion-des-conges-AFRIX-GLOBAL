@@ -70,6 +70,48 @@ export interface DemandeCongeDecision {
   decision: 'APPROUVEE' | 'REFUSEE';
   commentaire?: string;
 }
+
+export interface DashboardSummary {
+  total_employes: number;
+  demandes_en_attente: number;
+  demandes_approuvees: number;
+  demandes_refusees: number;
+  jours_approuves: number;
+  jours_en_attente: number;
+  taux_acceptation: number | null;
+}
+
+export interface DashboardBreakdown {
+  label: string;
+  demandes: number;
+  jours: number;
+}
+
+export interface DashboardMonthlyPoint {
+  mois: string;
+  demandes: number;
+  jours: number;
+}
+
+export interface DashboardUpcomingAbsence {
+  demande_id: number;
+  employe: string;
+  type_conge: string;
+  date_debut: string;
+  date_fin: string;
+  nombre_jours: number;
+  statut: StatutDemande;
+}
+
+export interface DashboardOverview {
+  annee: number;
+  role: string;
+  summary: DashboardSummary;
+  by_type: DashboardBreakdown[];
+  monthly_evolution: DashboardMonthlyPoint[];
+  upcoming_absences: DashboardUpcomingAbsence[];
+}
+
 export interface NotificationItem {
   id: number;
   destinataire_id: number;

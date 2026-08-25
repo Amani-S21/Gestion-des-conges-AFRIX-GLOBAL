@@ -125,8 +125,8 @@ import { ModalComponent } from '../../shared/modal/modal';
           [class.text-emerald-800]="user.role === 'EMPLOYE'"
           [class.bg-amber-100]="user.role === 'MANAGER'"
           [class.text-amber-800]="user.role === 'MANAGER'"
-          [class.bg-purple-100]="user.role === 'RH_ADMIN'"
-          [class.text-purple-800]="user.role === 'RH_ADMIN'">
+           [class.bg-(--color-primary)/10]="user.role === 'RH_ADMIN'"
+           [class.text-(--color-primary)]="user.role === 'RH_ADMIN'">
           {{ getRoleLabel(user.role) }}
         </span>
       </td>

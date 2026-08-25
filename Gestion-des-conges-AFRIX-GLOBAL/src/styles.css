@@ -32,6 +32,76 @@ main {
   animation-delay: 240ms;
 }
 
+.scroll-reveal-ready {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 650ms cubic-bezier(0.16, 1, 0.3, 1), transform 650ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.scroll-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-slide {
+  background-position: center;
+  background-size: cover;
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 700ms ease, transform 8000ms ease;
+}
+
+.hero-slide-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.hero-grid {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, black, transparent 80%);
+}
+
+.hero-copy {
+  animation: heroCopyIn 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-tab-active {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.hero-progress {
+  opacity: 0.35;
+}
+
+.hero-progress-running {
+  animation: heroProgress 6s linear both;
+  opacity: 1;
+}
+
+@keyframes heroCopyIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroProgress {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
 @keyframes homeReveal {
   from {
     opacity: 0;
@@ -83,5 +153,13 @@ main {
     box-shadow: none !important;
     border: 1px solid #ddd !important;
     break-inside: avoid;
+  }
+}
+
+@media (max-width: 639px) {
+
+  .hero-stage,
+  .hero-stage>div.relative {
+    min-height: 760px;
   }
 }

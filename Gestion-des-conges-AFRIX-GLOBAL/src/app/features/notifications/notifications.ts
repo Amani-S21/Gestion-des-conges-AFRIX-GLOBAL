@@ -26,6 +26,12 @@ import { IconComponent } from '../../shared/icon/icon';
           </span>
         }
       </div>
+      <div class="mt-8 border-t border-(--color-text)/10 pt-6">
+        <a routerLink="/dashboard" class="inline-flex items-center gap-2 text-sm text-(--color-primary) no-underline">
+          <app-icon name="arrow-left" />
+          Retour au tableau de bord
+        </a>
+      </div>
 
       <!-- État de chargement -->
             @if (isLoading()) {
@@ -65,7 +71,7 @@ import { IconComponent } from '../../shared/icon/icon';
                 <div class="flex items-center gap-3">
                   <h3 class="font-bold text-(--color-text)">{{ notif.titre }}</h3>
                   @if (!notif.lue) {
-                    <span class="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-bold uppercase text-blue-800">
+                      <span class="rounded-full bg-(--color-primary)/10 px-2 py-0.5 text-[10px] font-bold uppercase text-(--color-primary)">
                       Nouveau
                     </span>
                   }
@@ -99,12 +105,7 @@ import { IconComponent } from '../../shared/icon/icon';
         </div>
       }
 
-      <div class="mt-8 border-t border-(--color-text)/10 pt-6">
-        <a routerLink="/dashboard" class="inline-flex items-center gap-2 text-sm text-(--color-primary) no-underline">
-          <app-icon name="arrow-left" />
-          Retour au tableau de bord
-        </a>
-      </div>
+      
 
     </main>
   `,

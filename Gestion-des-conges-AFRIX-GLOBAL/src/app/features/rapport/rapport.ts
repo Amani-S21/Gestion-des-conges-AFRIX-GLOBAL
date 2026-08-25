@@ -61,9 +61,9 @@ import { IconComponent } from '../../shared/icon/icon';
             <p class="mt-1 text-xs text-(--color-text-secondary)">Jours ouvrés accordés</p>
           </div>
 
-          <div class="card border-l-4 border-purple-500 p-5">
+          <div class="card border-l-4 border-(--color-primary-light) p-5">
             <p class="text-xs font-bold uppercase text-(--color-text-secondary)">Taux d'acceptation</p>
-            <p class="mt-2 text-3xl font-black text-purple-600">{{ tauxAcceptation() }}%</p>
+            <p class="mt-2 text-3xl font-black text-(--color-primary)">{{ tauxAcceptation() === null ? '—' : tauxAcceptation() + '%' }}</p>
             <p class="mt-1 text-xs text-(--color-text-secondary)">Sur l'ensemble des décisions</p>
           </div>
 
@@ -81,7 +81,7 @@ import { IconComponent } from '../../shared/icon/icon';
                   <p class="font-bold text-sm text-(--color-text)">{{ dep.nom }}</p>
                   <span class="font-bold text-xs text-(--color-primary)">{{ dep.pourcentage }}%</span>
                 </div>
-                <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                <div class="h-2 w-full overflow-hidden rounded-full bg-(--color-primary)/10">
                   <div class="h-full rounded-full bg-(--color-primary)" [style.width.%]="dep.pourcentage"></div>
                 </div>
                 <p class="text-xs text-(--color-text-secondary)">{{ dep.effectif }} collaborateur(s)</p>
@@ -126,7 +126,7 @@ export class Rapport implements OnInit {
 
   readonly tauxAcceptation = computed(() => {
     const traites = this.conges().filter((c) => c.statut === 'APPROUVEE' || c.statut === 'REFUSEE');
-    if (traites.length === 0) return 100;
+    if (traites.length === 0) return null;
     const approuvees = traites.filter((c) => c.statut === 'APPROUVEE').length;
     return Math.round((approuvees / traites.length) * 100);
   });
@@ -150,7 +150,7 @@ export class Rapport implements OnInit {
     this.userApi.getUsers().subscribe({
       next: (users) => {
         this.users.set(users);
-        this.congeApi.getCongesAValider().subscribe({
+        this.congeApi.getToutesLesDemandes().subscribe({
           next: (conges) => {
             this.conges.set(conges);
             this.isLoading.set(false);

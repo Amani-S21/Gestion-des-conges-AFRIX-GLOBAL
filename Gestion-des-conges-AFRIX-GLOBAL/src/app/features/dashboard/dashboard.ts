@@ -2,8 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } 
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { CongeApiService } from '../../core/services/conge-api.service';
+import { DashboardApiService } from '../../core/services/dashboard-api.service';
 import { SoldeApiService } from '../../core/services/solde-api.service';
-import { DemandeConge, SoldeConge, StatutDemande } from '../../core/services/models';
+import { DashboardOverview, DemandeConge, SoldeConge, StatutDemande } from '../../core/services/models';
 import { IconComponent } from '../../shared/icon/icon';
 
 @Component({
@@ -25,8 +26,8 @@ import { IconComponent } from '../../shared/icon/icon';
               [class.text-emerald-800]="currentUser()?.role === 'EMPLOYE'"
               [class.bg-amber-100]="currentUser()?.role === 'MANAGER'"
               [class.text-amber-800]="currentUser()?.role === 'MANAGER'"
-              [class.bg-purple-100]="currentUser()?.role === 'RH_ADMIN'"
-              [class.text-purple-800]="currentUser()?.role === 'RH_ADMIN'">
+              [class.bg-(--color-primary)/10]="currentUser()?.role === 'RH_ADMIN'"
+              [class.text-(--color-primary)]="currentUser()?.role === 'RH_ADMIN'">
               {{ getRoleLabel(currentUser()?.role) }}
             </span>
           </div>
@@ -71,6 +72,122 @@ import { IconComponent } from '../../shared/icon/icon';
             <app-icon name="chevron" />
           </a>
         </div>
+      }
+
+      @if (overviewError()) {
+        <div class="mb-8 flex flex-col gap-3 rounded-2xl border border-(--color-danger)/30 bg-(--color-danger)/10 p-4 text-sm sm:flex-row sm:items-center sm:justify-between" role="alert">
+          <div>
+            <p class="font-bold text-(--color-text)">Les indicateurs sont momentanément indisponibles.</p>
+            <p class="mt-1 text-(--color-text-secondary)">Vos soldes et demandes restent accessibles ci-dessous.</p>
+          </div>
+          <button class="btn btn-secondary shrink-0 text-sm" type="button" (click)="loadOverview()">Réessayer</button>
+        </div>
+      }
+
+      @if (overview(); as stats) {
+        <section class="mb-10" aria-labelledby="overview-heading">
+          <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.18em] text-(--color-primary)">Vue d'ensemble</p>
+              <h2 id="overview-heading" class="mt-1 text-xl font-bold text-(--color-text)">
+                {{ isManagerOrRH() ? "L'activité de votre périmètre" : "Mon activité" }}
+              </h2>
+            </div>
+            <span class="text-xs font-semibold text-(--color-text-secondary)">Année {{ stats.annee }}</span>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <article class="card border-l-4 border-(--color-primary) p-5">
+              <p class="text-xs font-bold uppercase tracking-wider text-(--color-text-secondary)">{{ isManagerOrRH() ? 'Collaborateurs actifs' : 'Jours approuvés' }}</p>
+              <p class="mt-2 text-3xl font-black text-(--color-primary)">{{ isManagerOrRH() ? stats.summary.total_employes : stats.summary.jours_approuves }}</p>
+              <p class="mt-1 text-xs text-(--color-text-secondary)">{{ isManagerOrRH() ? 'Dans votre périmètre' : 'Cette année' }}</p>
+            </article>
+            <article class="card border-l-4 border-(--color-warning) p-5">
+              <p class="text-xs font-bold uppercase tracking-wider text-(--color-text-secondary)">Demandes en attente</p>
+              <p class="mt-2 text-3xl font-black text-(--color-warning)">{{ stats.summary.demandes_en_attente }}</p>
+              <p class="mt-1 text-xs text-(--color-text-secondary)">{{ isManagerOrRH() ? 'À traiter' : 'En cours de validation' }}</p>
+            </article>
+            <article class="card border-l-4 border-(--color-success) p-5">
+              <p class="text-xs font-bold uppercase tracking-wider text-(--color-text-secondary)">{{ isManagerOrRH() ? 'Jours approuvés' : 'Jours en attente' }}</p>
+              <p class="mt-2 text-3xl font-black text-(--color-success)">{{ isManagerOrRH() ? stats.summary.jours_approuves : stats.summary.jours_en_attente }}</p>
+              <p class="mt-1 text-xs text-(--color-text-secondary)">{{ isManagerOrRH() ? 'Accordés cette année' : 'À confirmer par le manager' }}</p>
+            </article>
+            <article class="card border-l-4 border-(--color-primary-light) p-5">
+              <p class="text-xs font-bold uppercase tracking-wider text-(--color-text-secondary)">Taux d'acceptation</p>
+              <p class="mt-2 text-3xl font-black text-(--color-primary)">{{ stats.summary.taux_acceptation === null ? '—' : stats.summary.taux_acceptation + '%' }}</p>
+              <p class="mt-1 text-xs text-(--color-text-secondary)">Sur les décisions rendues</p>
+            </article>
+          </div>
+
+          <div class="mt-6 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+            <section class="card p-5 sm:p-6" aria-labelledby="monthly-heading">
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <h3 id="monthly-heading" class="text-base font-bold text-(--color-text)">Évolution des absences</h3>
+                  <p class="mt-1 text-xs text-(--color-text-secondary)">Jours demandés par mois</p>
+                </div>
+                <span class="text-xs font-semibold text-(--color-primary)">{{ stats.annee }}</span>
+              </div>
+              <div class="mt-6 grid grid-cols-6 items-end gap-2 sm:grid-cols-12" aria-label="Graphique de l'évolution mensuelle">
+                @for (point of stats.monthly_evolution; track point.mois) {
+                  <div class="group flex min-w-0 flex-col items-center gap-2">
+                    <span class="text-[10px] font-semibold text-(--color-text-secondary) opacity-0 transition-opacity group-hover:opacity-100">{{ point.jours }}j</span>
+                    <div class="flex h-32 w-full items-end rounded-lg bg-(--color-primary)/5 p-1">
+                      <div class="w-full rounded-md bg-(--color-primary) transition-[height] duration-700" [style.height.%]="monthlyBarHeight(point.jours)" [attr.aria-label]="point.jours + ' jours en ' + monthLabel(point.mois)"></div>
+                    </div>
+                    <span class="text-[10px] font-bold text-(--color-text-secondary)">{{ monthLabel(point.mois) }}</span>
+                  </div>
+                }
+              </div>
+            </section>
+
+            <section class="card p-5 sm:p-6" aria-labelledby="types-heading">
+              <h3 id="types-heading" class="text-base font-bold text-(--color-text)">Répartition par type</h3>
+              <p class="mt-1 text-xs text-(--color-text-secondary)">Volume de jours demandés</p>
+              <div class="mt-6 space-y-5">
+                @if (stats.by_type.length === 0) {
+                  <p class="text-sm text-(--color-text-secondary)">Aucune demande enregistrée pour cette année.</p>
+                } @else {
+                  @for (item of stats.by_type; track item.label) {
+                    <div>
+                      <div class="mb-2 flex items-center justify-between gap-3 text-xs">
+                        <span class="truncate font-semibold text-(--color-text)">{{ item.label }}</span>
+                        <span class="shrink-0 font-bold text-(--color-primary)">{{ item.jours }}j</span>
+                      </div>
+                      <div class="h-2 overflow-hidden rounded-full bg-(--color-primary)/10">
+                        <div class="h-full rounded-full bg-(--color-primary) transition-[width] duration-700" [style.width.%]="typeBarWidth(item.jours)"></div>
+                      </div>
+                    </div>
+                  }
+                }
+              </div>
+            </section>
+          </div>
+
+          @if (stats.upcoming_absences.length > 0) {
+            <section class="card mt-6 p-5 sm:p-6" aria-labelledby="upcoming-heading">
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <h3 id="upcoming-heading" class="text-base font-bold text-(--color-text)">Prochaines absences</h3>
+                  <p class="mt-1 text-xs text-(--color-text-secondary)">Les périodes à venir dans votre périmètre</p>
+                </div>
+                <app-icon name="calendar" />
+              </div>
+              <div class="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                @for (absence of stats.upcoming_absences; track absence.demande_id) {
+                  <div class="rounded-xl border border-(--color-text)/10 p-4">
+                    <div class="flex items-start justify-between gap-3">
+                      <p class="truncate text-sm font-bold text-(--color-text)">{{ absence.employe }}</p>
+                      <span class="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold" [class.bg-amber-100]="absence.statut === 'EN_ATTENTE'" [class.text-amber-800]="absence.statut === 'EN_ATTENTE'" [class.bg-emerald-100]="absence.statut === 'APPROUVEE'" [class.text-emerald-800]="absence.statut === 'APPROUVEE'">{{ getStatutLabel(absence.statut) }}</span>
+                    </div>
+                    <p class="mt-2 text-xs text-(--color-text-secondary)">{{ absence.type_conge }} · {{ absence.nombre_jours }} jour(s)</p>
+                    <p class="mt-1 text-xs font-semibold text-(--color-primary)">{{ formatDate(absence.date_debut) }} → {{ formatDate(absence.date_fin) }}</p>
+                  </div>
+                }
+              </div>
+            </section>
+          }
+        </section>
       }
 
       <!-- Section des soldes de congés -->
@@ -210,6 +327,7 @@ import { IconComponent } from '../../shared/icon/icon';
 export default class Dashboard implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly congeApi = inject(CongeApiService);
+  private readonly dashboardApi = inject(DashboardApiService);
   private readonly soldeApi = inject(SoldeApiService);
 
   readonly currentYear = new Date().getFullYear();
@@ -219,6 +337,8 @@ export default class Dashboard implements OnInit {
   readonly soldes = signal<SoldeConge[]>([]);
   readonly mesDemandes = signal<DemandeConge[]>([]);
   readonly demandesAValider = signal<DemandeConge[]>([]);
+  readonly overview = signal<DashboardOverview | null>(null);
+  readonly overviewError = signal(false);
 
   readonly isManagerOrRH = computed(() => {
     const role = this.currentUser()?.role;
@@ -226,6 +346,8 @@ export default class Dashboard implements OnInit {
   });
 
   readonly dernieresDemandes = computed(() => this.mesDemandes().slice(0, 5));
+  readonly maxMonthlyDays = computed(() => Math.max(...(this.overview()?.monthly_evolution.map((point) => point.jours) ?? [0]), 1));
+  readonly maxTypeDays = computed(() => Math.max(...(this.overview()?.by_type.map((item) => item.jours) ?? [0]), 1));
 
   ngOnInit(): void {
     this.loadData();
@@ -233,6 +355,8 @@ export default class Dashboard implements OnInit {
 
   loadData(): void {
     this.isLoading.set(true);
+
+    this.loadOverview();
 
     // 1. Charger les soldes
     this.soldeApi.getMesSoldes(this.currentYear).subscribe({
@@ -259,6 +383,33 @@ export default class Dashboard implements OnInit {
         error: () => this.demandesAValider.set([]),
       });
     }
+  }
+
+  loadOverview(): void {
+    this.overviewError.set(false);
+    this.dashboardApi.getOverview(this.currentYear).subscribe({
+      next: (overview) => this.overview.set(overview),
+      error: () => {
+        this.overview.set(null);
+        this.overviewError.set(true);
+      },
+    });
+  }
+
+  monthlyBarHeight(days: number): number {
+    return days === 0 ? 4 : Math.max(8, (days / this.maxMonthlyDays()) * 100);
+  }
+
+  typeBarWidth(days: number): number {
+    return Math.max(4, (days / this.maxTypeDays()) * 100);
+  }
+
+  monthLabel(month: string): string {
+    const labels: Record<string, string> = {
+      '01': 'Jan', '02': 'Fév', '03': 'Mar', '04': 'Avr', '05': 'Mai', '06': 'Juin',
+      '07': 'Juil', '08': 'Août', '09': 'Sep', '10': 'Oct', '11': 'Nov', '12': 'Déc',
+    };
+    return labels[month] ?? month;
   }
 
   getRoleLabel(role?: string): string {
